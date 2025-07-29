@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "167280992660",
+    "project_id": "snapeats-6545b",
+    "storage_bucket": "snapeats-6545b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167280992660:android:a2596a54d4e235ac882f81",
+        "android_client_info": {
+          "package_name": "com.example.snapeats"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq3-6Jwrla3PIbdrA75bxlSQiGWvmobts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

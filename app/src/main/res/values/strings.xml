@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SnapEats</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="food_sample_description">Juicy, grilled patty layered with melted cheese.
+                        Fresh lettuce, tomatoes, and pickles add crunch.
+                        Served in a toasted, buttered bun.
+                        Topped with creamy mayo and tangy sauces.
+                        A perfect blend of flavors in every bite.</string>
+</resources>

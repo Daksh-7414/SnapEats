@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="favoritefilled">#E63946</color>
+
+    <color name="coloraddicon">#3FA663</color>
+    <color name="ripplecolor">#E3F8EA</color>
+
+    <!-- 🌿 Primary brand color: Soft Olive Green -->
+    <color name="colorPrimary">#6BAE75</color> <!-- Use in: Topbar, buttons, icons (active), heart (active), bottom nav (selected) -->
+
+    <!-- ⚪ App Background -->
+    <color name="colorBackground">#FFFFFF</color> <!-- Use in: Full app background -->
+
+    <!-- ⚪ Surface / Card background -->
+    <color name="colorSurface">#F6F6F6</color> <!-- Use in: Scroll areas, containers, form areas -->
+    <color name="colorcard">#FCFCFC</color> <!-- Use in: Scroll areas, containers, form areas -->
+
+    <!-- 🖤 Primary Text -->
+    <color name="colorTextPrimary">#1F272D</color> <!-- Use in: Headlines, burger name, headings -->
+
+    <!-- 🩶 Secondary Text -->
+    <color name="colorTextSecondary">#666666</color> <!-- Use in: Subtitles, category names, brand info -->
+
+    <!-- 🌟 Optional Accent: Soft Yellow -->
+    <color name="colorAccent">#FFD166</color> <!-- Use in: Offers, highlights, badges -->
+
+    <!-- ❌ Error / Destructive Actions -->
+    <color name="colorError">#E63946</color> <!-- Use in: Logout, Delete, Remove buttons -->
+
+    <!-- ⚙️ Inactive Icons -->
+    <color name="colorIconInactive">#9E9E9E</color> <!-- Use in: Bottom nav inactive state -->
+
+    <!-- ⚙️ Neutral Border -->
+    <color name="colorBorderNeutral">#D3D3D3</color> <!-- Use in: Quantity buttons border, list item separators -->
+
+    <!-- 🤍 White Text -->
+    <color name="colorOnPrimary">#FFFFFF</color> <!-- Use in: Text on green buttons or green topbar -->
+
+    <!-- 🔲 Shadow / Divider (optional) -->
+    <color name="colorDivider">#E0E0E0</color>
+
+    <!-- 🩶 Arrow Icons (for profile screen) -->
+    <color name="colorArrowIcon">#CCCCCC</color>
+
+</resources>
