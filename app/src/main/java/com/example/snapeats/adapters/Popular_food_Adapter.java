@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -107,7 +108,7 @@ public class Popular_food_Adapter extends RecyclerView.Adapter<Popular_food_Adap
         ImageView food_image,like_btn;
         TextView food_name,food_restaurant,price;
         ImageButton addtocart;
-        ConstraintLayout popular_layout;
+        LinearLayout popular_layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

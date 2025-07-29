@@ -7,6 +7,7 @@
 
     <color name="coloraddicon">#3FA663</color>
     <color name="ripplecolor">#E3F8EA</color>
+    <color name="status_bar_color">#5E9767</color>
 
     <!-- 🌿 Primary brand color: Soft Olive Green -->
     <color name="colorPrimary">#6BAE75</color> <!-- Use in: Topbar, buttons, icons (active), heart (active), bottom nav (selected) -->

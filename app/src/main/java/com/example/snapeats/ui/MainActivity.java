@@ -1,22 +1,23 @@
 package com.example.snapeats.ui;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.snapeats.R;
+import com.example.snapeats.databinding.ActivityMainBinding;
 import com.example.snapeats.fragements.cart_screen;
-import com.example.snapeats.fragements.home_screen;
+import com.example.snapeats.fragements.HomeScreen;
 import com.example.snapeats.fragements.profile_screen;
 import com.example.snapeats.fragements.wishlist_screen;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ActivityMainBinding binding;
 
 //    ArrayList<Categories_model> categoryList = new ArrayList<>();
 //    ArrayList<Popular_food_model> popularFood_List = new ArrayList<>();
@@ -31,29 +32,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        BottomNavigationView bnView = findViewById(R.id.bnView);
-
-        bnView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                selectedItemId = id;
-                if (id == R.id.nav_home){
-                    loadFrag(new home_screen(), false);
-                } else if (id == R.id.nav_wishlist) {
-                    loadFrag(new wishlist_screen(), false);
-                } else if (id == R.id.nav_cart) {
-                    loadFrag(new cart_screen(), false);
-                } else {
-                    loadFrag(new profile_screen(), true);
-                }
-                return true;
+        binding.bnView.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            selectedItemId = id;
+            if (id == R.id.nav_home){
+                loadFrag(new HomeScreen(), false);
+            } else if (id == R.id.nav_wishlist) {
+                loadFrag(new wishlist_screen(), false);
+            } else if (id == R.id.nav_cart) {
+                loadFrag(new cart_screen(), false);
+            } else {
+                loadFrag(new profile_screen(), true);
             }
+            return true;
         });
 
-        bnView.setSelectedItemId(R.id.nav_home);
+        binding.bnView.setSelectedItemId(R.id.nav_home);
 
     }
     public void loadFrag(Fragment fragment, boolean flag){
