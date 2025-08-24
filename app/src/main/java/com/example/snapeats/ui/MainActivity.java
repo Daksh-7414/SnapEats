@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-private void refreshCurrentFragment() {
+    private void refreshCurrentFragment() {
         Fragment current = getSupportFragmentManager().findFragmentById(R.id.container);
         if (current == null) {
             Log.w("MainActivity", "No fragment loaded to refresh");
@@ -125,7 +125,8 @@ private void refreshCurrentFragment() {
             super.onBackPressed();
         }
     }
-//
+
+    //
     private void showNoInternetScreen() {
         getSupportFragmentManager()
                 .beginTransaction()
