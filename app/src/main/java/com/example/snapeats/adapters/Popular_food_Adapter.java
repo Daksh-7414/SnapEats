@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -102,8 +103,8 @@ public class Popular_food_Adapter extends RecyclerView.Adapter<Popular_food_Adap
     }
 
     public void updateData(ArrayList<Food_Item_Model> popularFoods) {
-        popularFoods.clear();
-        popularFoods.addAll(popularFoods);
+        this.popular_food_list.clear();
+        this.popular_food_list.addAll(popularFoods);
         notifyDataSetChanged();
     }
 
