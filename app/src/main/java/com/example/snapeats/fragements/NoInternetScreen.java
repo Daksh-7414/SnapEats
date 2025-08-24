@@ -92,7 +92,7 @@ public class NoInternetScreen extends Fragment {
                     FoodRepository.fetchFoods(() -> {
                         // Data fetched - navigate back or refresh (e.g., load home screen)
                         if (getActivity() instanceof MainActivity) {
-                            ((MainActivity) getActivity()).loadFrag(new home_screen(), false);
+                            ((MainActivity) getActivity()).loadFrag(new home_screen(), false,"HOME");
                         }
                     });
                 }

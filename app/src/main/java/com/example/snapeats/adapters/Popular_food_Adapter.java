@@ -103,8 +103,8 @@ public class Popular_food_Adapter extends RecyclerView.Adapter<Popular_food_Adap
     }
 
     public void updateData(ArrayList<Food_Item_Model> popularFoods) {
-        popularFoods.clear();
-        popularFoods.addAll(popularFoods);
+        this.popular_food_list.clear();
+        this.popular_food_list.addAll(popularFoods);
         notifyDataSetChanged();
     }
 
@@ -112,7 +112,7 @@ public class Popular_food_Adapter extends RecyclerView.Adapter<Popular_food_Adap
         ImageView food_image,like_btn;
         TextView food_name,food_restaurant,price;
         ImageButton addtocart;
-        LinearLayout popular_layout;
+        ConstraintLayout popular_layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

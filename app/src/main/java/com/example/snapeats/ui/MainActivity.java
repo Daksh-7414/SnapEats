@@ -42,21 +42,6 @@ public class MainActivity extends AppCompatActivity {
             Log.e("MainActivity", "BottomNavigationView not found - check XML");
             return;
         }
-        bnView.setOnNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            selectedItemId = id;
-            if (id == R.id.nav_home) {
-                loadFrag(new home_screen(), false);
-            } else if (id == R.id.nav_wishlist) {
-                loadFrag(new wishlist_screen(), false);
-            } else if (id == R.id.nav_cart) {
-                loadFrag(new cart_screen(), false);
-            } else {
-                loadFrag(new profile_screen(), true);
-            }
-            return true;
-        });
-        bnView.setSelectedItemId(R.id.nav_home);
 
         // STEP 1: Check Internet
         if (!NetworkUtils.isInternetAvailable(this)) {
@@ -74,13 +59,13 @@ public class MainActivity extends AppCompatActivity {
                 // Proceed to fetch data (only once)
                 FoodRepository.fetchFoods(() -> {
                     Log.d("MainActivity", "✅ Foods fetched. Size: " + FoodRepository.getAllFoods().size());
-                    if (FoodRepository.getAllFoods().isEmpty()) {
-                        Toast.makeText(MainActivity.this, "No food data found", Toast.LENGTH_SHORT).show();
-                        //showNoInternetScreen();
-                    } else {
-                        Toast.makeText(MainActivity.this, "Data aagya hn", Toast.LENGTH_SHORT).show();
-                        //refreshCurrentFragment(); // Refresh UI instead of fetching again
-                    }
+                    runOnUiThread(() -> {
+                        home_screen fragment = (home_screen) getSupportFragmentManager()
+                                .findFragmentByTag("HOME");
+                        if (fragment != null) {
+                            fragment.refreshData(); // method inside fragment to reload adapter
+                        }
+                    });
                 });
             }
 
@@ -88,9 +73,24 @@ public class MainActivity extends AppCompatActivity {
             public void onDisconnected() {
                 Log.w("MainActivity", "❌ Firebase disconnected");
                 Toast.makeText(MainActivity.this, "Firebase connection lost - trying to reconnect", Toast.LENGTH_SHORT).show();
-                //showNoInternetScreen();
             }
         });
+
+        bnView.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            selectedItemId = id;
+            if (id == R.id.nav_home) {
+                loadFrag(new home_screen(), false,"HOME");
+            } else if (id == R.id.nav_wishlist) {
+                loadFrag(new wishlist_screen(), false,"LIKE");
+            } else if (id == R.id.nav_cart) {
+                loadFrag(new cart_screen(), false,"CART");
+            } else {
+                loadFrag(new profile_screen(), true,"PROFILE");
+            }
+            return true;
+        });
+        bnView.setSelectedItemId(R.id.nav_home);
     }
 
     private void refreshCurrentFragment() {
@@ -104,13 +104,13 @@ public class MainActivity extends AppCompatActivity {
         } // Add similar for other data-dependent fragments if needed
     }
 
-    public void loadFrag(Fragment fragment, boolean flag) {
+    public void loadFrag(Fragment fragment, boolean flag, String tag) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         if (flag) {
-            ft.add(R.id.container, fragment);
+            ft.add(R.id.container, fragment,tag);
         } else {
-            ft.replace(R.id.container, fragment);
+            ft.replace(R.id.container, fragment,tag);
         }
         ft.commit();
     }

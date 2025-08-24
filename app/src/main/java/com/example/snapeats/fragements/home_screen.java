@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,23 +39,10 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link home_screen#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class home_screen extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     ArrayList<Categories_model> categoryList = new ArrayList<>();
+    ArrayList<Food_Item_Model> popularList = new ArrayList<>();
 //    public static ArrayList<Food_Item_Model> popularFood_List = new ArrayList<>();
 //    public static ArrayList<Food_Item_Model> recommended_food_list = new ArrayList<>();
 //    public static ArrayList<Food_Item_Model> wishlist_food_item = new ArrayList<>();
@@ -67,35 +55,13 @@ public class home_screen extends Fragment {
 
     ArrayList<Food_Item_Model> allfoodlist;
 
-    public home_screen() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment home_screen.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static home_screen newInstance(String param1, String param2) {
-        home_screen fragment = new home_screen();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public home_screen() {
+//        // Required empty public constructor
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -154,7 +120,8 @@ public class home_screen extends Fragment {
 
         RecyclerView recycler_popular_food = view.findViewById(R.id.popular_food_list);
         recycler_popular_food.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
-
+        popularList = FoodRepository.getPopularFoods();
+        Log.d("popular food list",popularList.size()+"");
         popularFoodAdapter = new Popular_food_Adapter(getContext(), FoodRepository.getPopularFoods(), new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(Food_Item_Model model) {
@@ -246,14 +213,7 @@ public class home_screen extends Fragment {
     }
 
     public void refreshData() {
-        // Assuming you have adapters for popular/recommended foods
         popularFoodAdapter.updateData(FoodRepository.getPopularFoods());
-        popularFoodAdapter.notifyDataSetChanged();
-
-        // Similarly for other lists
-        // recommendedAdapter.updateData(FoodRepository.getRecommendedFoods());
-        // recommendedAdapter.notifyDataSetChanged();
-
-        // Hide loading spinner or error views if needed
+        Log.d("popular refresh",FoodRepository.getPopularFoods().size()+"");
     }
 }
