@@ -1,23 +1,29 @@
 package com.example.snapeats.ui;
 
+import static com.example.snapeats.fragements.cart_screen.gotocart;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
+import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
 import com.example.snapeats.models.Food_Item_Model;
+import com.google.gson.Gson;
 
 public class Food_Detailed_Screen extends AppCompatActivity {
 
     ImageView img;
     TextView food_name,restaurant_name;
-    TextView food_description;
+    TextView food_description,food_price_top,food_price_down;
     ImageButton description_btn;
 
     @Override
@@ -29,8 +35,11 @@ public class Food_Detailed_Screen extends AppCompatActivity {
         img = findViewById(R.id.food_image);
         food_name = findViewById(R.id.food_name);
         restaurant_name = findViewById(R.id.food_restaurant_name);
-
         food_description = findViewById(R.id.food_description);
+        food_price_top = findViewById(R.id.food_price_top);
+        food_price_down = findViewById(R.id.food_price);
+
+
         description_btn = findViewById(R.id.description_btn);
         description_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,15 +54,37 @@ public class Food_Detailed_Screen extends AppCompatActivity {
             }
         });
 
-        Food_Item_Model foodModel = (Food_Item_Model) getIntent().getSerializableExtra("foodModel");
+        String json = getIntent().getStringExtra("foodModel");
+        Gson gson = new Gson();
+        Food_Item_Model model = gson.fromJson(json, Food_Item_Model.class);
 
         try {
-            img.setImageResource(foodModel.getFood_image());
-            food_name.setText(foodModel.getFood_name());
-            restaurant_name.setText(foodModel.getFood_restaurant_name());
+            Glide.with(this)
+                    .load(model.getFood_image())
+                    .into(img);
+            food_name.setText(model.getFood_name());
+            restaurant_name.setText(model.getFood_restaurant_name());
+            food_description.setText(model.getDescription());
+            food_price_top.setText(model.price);
+            food_price_down.setText(model.price);
+
         } catch (Exception e) {
             Log.e("error",e.getMessage());
         }
+        AppCompatButton order_btn = findViewById(R.id.order_btn);
+        order_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (model.isInCart()){
+                    model.cart_count++;
+                    gotocart(model);
+                    model.setInCart(true);
+                    Toast.makeText(Food_Detailed_Screen.this, "Item Add to Cart", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(Food_Detailed_Screen.this, "Item Already in Cart", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 //    @Override

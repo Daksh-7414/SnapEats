@@ -1,6 +1,6 @@
 package com.example.snapeats.fragements;
 
-import static com.example.snapeats.adapters.Food_Cart_Adapter.cart_food_list;
+import static com.example.snapeats.repository.FoodRepository.cartFoods;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -23,6 +23,7 @@ import com.example.snapeats.adapters.Food_Cart_Adapter;
 import com.example.snapeats.interfaces.OnCartActionListener;
 import com.example.snapeats.models.Food_Cart_Model;
 import com.example.snapeats.models.Food_Item_Model;
+import com.example.snapeats.repository.FoodRepository;
 
 import java.util.ArrayList;
 
@@ -99,7 +100,7 @@ public class cart_screen extends Fragment {
         totalprice = view.findViewById(R.id.totalprice);
         finalpriceView = view.findViewById(R.id.finalprice);
 
-        foodCartAdapter = new Food_Cart_Adapter(getContext(), cart_food_list, new OnCartActionListener() {
+        foodCartAdapter = new Food_Cart_Adapter(getContext(), cartFoods, new OnCartActionListener() {
             @Override
             public void onCartIncrement(Food_Item_Model model) {
                 if (model.cart_count < 10) {
@@ -120,11 +121,12 @@ public class cart_screen extends Fragment {
 
             @Override
             public void onCartRemove(Food_Item_Model model, int position) {
-                cart_food_list.remove(model);
+                cartFoods.remove(model);
                 foodCartAdapter.notifyItemRemoved(position);
                 calculateTotalPrice();
             }
         });
+
         recycler_food_cart.setAdapter(foodCartAdapter);
 
         return view;
@@ -151,7 +153,7 @@ public class cart_screen extends Fragment {
 
     private void calculateTotalPrice() {
         int total = 0;
-        for (Food_Item_Model model : cart_food_list) {
+        for (Food_Item_Model model : cartFoods) {
             int price = Integer.parseInt(model.price.replace("₹", "").trim());
             total += price * model.cart_count;
         }
@@ -177,8 +179,8 @@ public class cart_screen extends Fragment {
     }
 
     public static void gotocart(Food_Item_Model model){
-        if (!cart_food_list.contains(model)){
-            cart_food_list.add(model);
+        if (!cartFoods.contains(model)){
+            cartFoods.add(model);
         }
     }
 

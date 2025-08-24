@@ -1,14 +1,17 @@
 package com.example.snapeats.fragements;
 
-import static com.example.snapeats.adapters.Food_Cart_Adapter.cart_food_list;
-import static com.example.snapeats.adapters.Wishlist_Food_Adapter.wishlist_food_item;
+
 import static com.example.snapeats.fragements.cart_screen.gotocart;
 import static com.example.snapeats.fragements.wishlist_screen.gotowishlist;
+import static com.example.snapeats.repository.FoodRepository.cartFoods;
+import static com.example.snapeats.repository.FoodRepository.recommendedFoods;
+import static com.example.snapeats.repository.FoodRepository.wishlistFoods;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +19,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.snapeats.repository.FoodRepository;
 import com.example.snapeats.ui.Food_Detailed_Screen;
 import com.example.snapeats.R;
 import com.example.snapeats.ui.ViewCategory;
@@ -31,15 +38,26 @@ import com.example.snapeats.adapters.Recommended_Food_Adapter;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
 import com.example.snapeats.models.Categories_model;
 import com.example.snapeats.models.Food_Item_Model;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HomeScreen#newInstance} factory method to
+ * Use the {@link home_screen#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeScreen extends Fragment {
+public class home_screen extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,15 +69,19 @@ public class HomeScreen extends Fragment {
     private String mParam2;
 
     ArrayList<Categories_model> categoryList = new ArrayList<>();
-    ArrayList<Food_Item_Model> popularFood_List = new ArrayList<>();
-    ArrayList<Food_Item_Model> recommended_food_list = new ArrayList<>();
+//    public static ArrayList<Food_Item_Model> popularFood_List = new ArrayList<>();
+//    public static ArrayList<Food_Item_Model> recommended_food_list = new ArrayList<>();
+//    public static ArrayList<Food_Item_Model> wishlist_food_item = new ArrayList<>();
+//    public static ArrayList<Food_Item_Model> cart_food_list = new ArrayList<>();
 
     CategoryAdapter categoryAdapter;
     Popular_food_Adapter popularFoodAdapter;
     Recommended_Food_Adapter recommendedFoodAdapter;
 
 
-    public HomeScreen() {
+    ArrayList<Food_Item_Model> allfoodlist;
+
+    public home_screen() {
         // Required empty public constructor
     }
 
@@ -72,8 +94,8 @@ public class HomeScreen extends Fragment {
      * @return A new instance of fragment home_screen.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeScreen newInstance(String param1, String param2) {
-        HomeScreen fragment = new HomeScreen();
+    public static home_screen newInstance(String param1, String param2) {
+        home_screen fragment = new home_screen();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -110,8 +132,6 @@ public class HomeScreen extends Fragment {
             }
         }, 1000);
 
-
-
         // Inflate the layout for this fragment
         RecyclerView recyclerView = view.findViewById(R.id.categoriesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
@@ -119,9 +139,9 @@ public class HomeScreen extends Fragment {
         // Load Categories
         categoryList.add(new Categories_model(R.drawable.pizza,"Pizza"));
         categoryList.add(new Categories_model(R.drawable.burger,"Burger"));
-        categoryList.add(new Categories_model(R.drawable.donut,"Donut"));
+        categoryList.add(new Categories_model(R.drawable.penne,"Pasta"));
         categoryList.add(new Categories_model(R.drawable.cola,"Drinks"));
-        categoryList.add(new Categories_model(R.drawable.hotdog,"Hot Dog"));
+        categoryList.add(new Categories_model(R.drawable.cake,"Dessert"));
         categoryList.add(new Categories_model(R.drawable.sandwich,"Sandwich"));
 
         categoryAdapter = new CategoryAdapter(getContext(), categoryList);
@@ -132,7 +152,7 @@ public class HomeScreen extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent viewCat = new Intent(getContext(), ViewCategory.class);
-                startActivity(viewCat); // <-- You missed this line
+                startActivity(viewCat);
             }
         });
 
@@ -149,20 +169,13 @@ public class HomeScreen extends Fragment {
         RecyclerView recycler_popular_food = view.findViewById(R.id.popular_food_list);
         recycler_popular_food.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
 
-        //load Popular food items
-        popularFood_List.add(new Food_Item_Model(R.drawable.burger_img,"Chicken Burger","Cookie Heaven","₹30"));
-        popularFood_List.add(new Food_Item_Model(R.drawable.burger_img,"Cheese Pizza","Cookie Heaven","₹30"));
-        popularFood_List.add(new Food_Item_Model(R.drawable.burger_img,"Sugar Ring Donut","Cookie Heaven","₹30"));
-        popularFood_List.add(new Food_Item_Model(R.drawable.burger_img,"Spicy Hot Dog","Cookie Heaven","₹30"));
-        popularFood_List.add(new Food_Item_Model(R.drawable.burger_img,"Crunch Bite Sandwich","Cookie Heaven","₹30"));
-        popularFood_List.add(new Food_Item_Model(R.drawable.burger_img,"Margherita Pizza","Cookie Heaven","₹30"));
-
-        popularFoodAdapter = new Popular_food_Adapter(getContext(), popularFood_List, new OnFoodItemActionListener() {
+        popularFoodAdapter = new Popular_food_Adapter(getContext(), FoodRepository.getPopularFoods(), new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(Food_Item_Model model) {
-                if (!cart_food_list.contains(model)){
+                if (model.isInCart()){
                     model.cart_count++;
                     gotocart(model);
+                    model.setInCart(true);
                     Toast.makeText(view.getContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(view.getContext(), "Item Already in Cart", Toast.LENGTH_SHORT).show();
@@ -171,8 +184,9 @@ public class HomeScreen extends Fragment {
 
             @Override
             public void onToggleWishlist(Food_Item_Model model, int position) {
-                if (wishlist_food_item.contains(model)) {
-                    wishlist_food_item.remove(model);
+                if (model.isInWishlist()) {
+                    model.setInWishlist(false);
+                    wishlistFoods.remove(model);
                 } else {
                     gotowishlist(model);
                 }
@@ -181,8 +195,10 @@ public class HomeScreen extends Fragment {
 
             @Override
             public void onFoodItemClick(Food_Item_Model model) {
+                Gson gson = new Gson();
+                String json = gson.toJson(model);
                 Intent intent = new Intent(getContext(), Food_Detailed_Screen.class);
-                intent.putExtra("foodModel", model);
+                intent.putExtra("foodModel", json);
                 startActivity(intent);
             }
         });
@@ -194,20 +210,10 @@ public class HomeScreen extends Fragment {
         recycler_recommended_food.setNestedScrollingEnabled(false);
         recycler_recommended_food.setHasFixedSize(false);
 
-        recommended_food_list.add(new Food_Item_Model(R.drawable.burger_img,"Chicken Burger","Cookie Heaven","₹30"));
-        recommended_food_list.add(new Food_Item_Model(R.drawable.burger_img,"Cheese Pizza","Cookie Heaven","₹30"));
-        recommended_food_list.add(new Food_Item_Model(R.drawable.burger_img,"Sugar Ring Donut","Cookie Heaven","₹30"));
-        recommended_food_list.add(new Food_Item_Model(R.drawable.burger_img,"Spicy Hot Dog","Cookie Heaven","₹30"));
-        recommended_food_list.add(new Food_Item_Model(R.drawable.burger_img,"Crunch Bite Sandwich","Cookie Heaven","₹30"));
-        recommended_food_list.add(new Food_Item_Model(R.drawable.burger_img,"Margherita Pizza","Cookie Heaven","₹30"));
-        recommended_food_list.add(new Food_Item_Model(R.drawable.burger_img,"Crispy Veg Burger","Cookie Heaven","₹30"));
-        recommended_food_list.add(new Food_Item_Model(R.drawable.burger_img,"Aloo Cheese Sandwich","Cookie Heaven","₹30"));
-        recommended_food_list.add(new Food_Item_Model(R.drawable.burger_img,"Chicken Burger","Cookie Heaven","₹30"));
-
-        recommendedFoodAdapter = new Recommended_Food_Adapter(getContext(), recommended_food_list, new OnFoodItemActionListener() {
+        recommendedFoodAdapter = new Recommended_Food_Adapter(getContext(), recommendedFoods, new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(Food_Item_Model model) {
-                if (!cart_food_list.contains(model)){
+                if (!cartFoods.contains(model)){
                     model.cart_count++;
                     gotocart(model);
                     Toast.makeText(view.getContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
@@ -218,19 +224,21 @@ public class HomeScreen extends Fragment {
 
             @Override
             public void onToggleWishlist(Food_Item_Model model, int position) {
-                if (wishlist_food_item.contains(model)) {
-                    wishlist_food_item.remove(model);
+                if (model.isInWishlist()) {
+                    model.setInWishlist(false);
+                    wishlistFoods.remove(model);
                 } else {
                     gotowishlist(model);
                 }
                 recommendedFoodAdapter.notifyItemChanged(position);
-
             }
 
             @Override
             public void onFoodItemClick(Food_Item_Model model) {
+                Gson gson = new Gson();
+                String json = gson.toJson(model);
                 Intent intent = new Intent(getContext(), Food_Detailed_Screen.class);
-                intent.putExtra("foodModel", model);
+                intent.putExtra("foodModel", json);
                 startActivity(intent);
             }
 
@@ -249,5 +257,17 @@ public class HomeScreen extends Fragment {
         if (popularFoodAdapter != null) {
             popularFoodAdapter.notifyDataSetChanged();
         }
+    }
+
+    public void refreshData() {
+        // Assuming you have adapters for popular/recommended foods
+        popularFoodAdapter.updateData(FoodRepository.getPopularFoods());
+        popularFoodAdapter.notifyDataSetChanged();
+
+        // Similarly for other lists
+        // recommendedAdapter.updateData(FoodRepository.getRecommendedFoods());
+        // recommendedAdapter.notifyDataSetChanged();
+
+        // Hide loading spinner or error views if needed
     }
 }

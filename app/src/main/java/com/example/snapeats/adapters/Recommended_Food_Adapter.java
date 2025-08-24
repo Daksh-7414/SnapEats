@@ -1,6 +1,5 @@
 package com.example.snapeats.adapters;
 
-import static com.example.snapeats.adapters.Wishlist_Food_Adapter.wishlist_food_item;
 
 import android.content.Context;
 import android.util.TypedValue;
@@ -15,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
 import com.example.snapeats.models.Food_Item_Model;
@@ -44,7 +44,9 @@ public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_F
     @Override
     public void onBindViewHolder(@NonNull Recommended_Food_Adapter.ViewHolder holder, int position) {
         Food_Item_Model model = recommended_food_list.get(position);
-        holder.food_image.setImageResource(model.food_image);
+        Glide.with(context)
+                .load(model.getFood_image())
+                .into(holder.food_image);
         holder.food_name.setText(model.food_name);
         holder.food_restaurant.setText(model.food_restaurant_name);
         holder.price.setText(model.price);
@@ -64,10 +66,12 @@ public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_F
         });
 
 
-        if (wishlist_food_item.contains(model)) {
+        if (model.isInWishlist()) {
             holder.like_btn.setImageResource(R.drawable.favorite);
+            model.setInWishlist(true);
         } else {
             holder.like_btn.setImageResource(R.drawable.favorite_border);
+            model.setInWishlist(false);
         }
 
         holder.like_btn.setOnClickListener(new View.OnClickListener() {

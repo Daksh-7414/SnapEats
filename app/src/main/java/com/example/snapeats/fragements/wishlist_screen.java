@@ -1,8 +1,8 @@
 package com.example.snapeats.fragements;
 
-import static com.example.snapeats.adapters.Food_Cart_Adapter.cart_food_list;
-import static com.example.snapeats.adapters.Wishlist_Food_Adapter.wishlist_food_item;
 import static com.example.snapeats.fragements.cart_screen.gotocart;
+import static com.example.snapeats.repository.FoodRepository.cartFoods;
+import static com.example.snapeats.repository.FoodRepository.wishlistFoods;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import com.example.snapeats.R;
 import com.example.snapeats.adapters.Wishlist_Food_Adapter;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
 import com.example.snapeats.models.Food_Item_Model;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,6 @@ public class wishlist_screen extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    ArrayList<Food_Item_Model> wishlist_food_list = new ArrayList<>();
     Wishlist_Food_Adapter wishlist_food_adapter;
 
 
@@ -80,13 +80,14 @@ public class wishlist_screen extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wishlist_screen, container, false);
 
+
         RecyclerView recycler_wishlist_food = view.findViewById(R.id.wishlist_list);
         recycler_wishlist_food.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
 
-        wishlist_food_adapter = new Wishlist_Food_Adapter(getContext(), wishlist_food_item, new OnFoodItemActionListener() {
+        wishlist_food_adapter = new Wishlist_Food_Adapter(getContext(), wishlistFoods, new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(Food_Item_Model model) {
-                if (!cart_food_list.contains(model)){
+                if (!cartFoods.contains(model)){
                     model.cart_count++;
                     gotocart(model);
                     Toast.makeText(view.getContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
@@ -97,26 +98,31 @@ public class wishlist_screen extends Fragment {
 
             @Override
             public void onToggleWishlist(Food_Item_Model model, int position) {
-                wishlist_food_item.remove(position);
+                wishlistFoods.remove(position);
                 wishlist_food_adapter.notifyItemRemoved(position);
-                wishlist_food_adapter.notifyItemRangeChanged(position, wishlist_food_item.size());
+                wishlist_food_adapter.notifyItemRangeChanged(position, wishlistFoods.size());
 
             }
 
             @Override
             public void onFoodItemClick(Food_Item_Model model) {
+                Gson gson = new Gson();
+                String json = gson.toJson(model);
                 Intent intent = new Intent(getContext(), Food_Detailed_Screen.class);
-                intent.putExtra("foodModel", model);
+                intent.putExtra("foodModel", json);
                 startActivity(intent);
             }
         });
         recycler_wishlist_food.setAdapter(wishlist_food_adapter);
 
+
         return view;
     }
     public static void gotowishlist(Food_Item_Model model){
-        if (!wishlist_food_item.contains(model)) {
-            wishlist_food_item.add(model);
+        if (!model.isInWishlist()) {
+            model.setInWishlist(true); // mark as wishlist
+            wishlistFoods.add(model);
         }
     }
+
 }
