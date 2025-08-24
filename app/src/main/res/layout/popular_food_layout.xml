@@ -32,7 +32,7 @@
                 android:background="@drawable/card_background"
                 android:clipToOutline="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/burger_img"
+                android:src="@drawable/pizzaaa"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.61"

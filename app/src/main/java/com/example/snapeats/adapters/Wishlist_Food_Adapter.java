@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
 import com.example.snapeats.models.Food_Item_Model;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 
 public class Wishlist_Food_Adapter extends RecyclerView.Adapter<Wishlist_Food_Adapter.ViewHolder> {
     Context context;
-    public static ArrayList<Food_Item_Model> wishlist_food_item = new ArrayList<>();
+    ArrayList<Food_Item_Model> wishlist_food_item;
     OnFoodItemActionListener listener;
 
 
@@ -42,7 +43,9 @@ public class Wishlist_Food_Adapter extends RecyclerView.Adapter<Wishlist_Food_Ad
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Food_Item_Model model = wishlist_food_item.get(position);
-        holder.food_image.setImageResource(model.food_image);
+        Glide.with(context)
+                .load(model.getFood_image())
+                .into(holder.food_image);
         holder.food_name.setText(model.food_name);
         holder.food_restaurant.setText(model.food_restaurant_name);
         holder.price.setText(model.price);
