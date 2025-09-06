@@ -1,6 +1,6 @@
 package com.example.snapeats.fragements;
 
-import static com.example.snapeats.repository.FoodRepository.cartFoods;
+//import static com.example.snapeats.repository.FoodRepository.cartFoods;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -10,22 +10,32 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.snapeats.R;
 import com.example.snapeats.adapters.Food_Cart_Adapter;
 import com.example.snapeats.interfaces.OnCartActionListener;
+import com.example.snapeats.managers.CartManager;
 import com.example.snapeats.models.Food_Cart_Model;
 import com.example.snapeats.models.Food_Item_Model;
 import com.example.snapeats.repository.FoodRepository;
+import com.example.snapeats.utils.NetworkUtils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,10 +59,18 @@ public class cart_screen extends Fragment {
 
     ArrayList<Food_Item_Model> foodCartModelArrayList = new ArrayList<>();
     Food_Cart_Adapter foodCartAdapter;
+    private FoodRepository foodRepository;
+    CartManager cartManager;
 
-    static int deliveryfeevalue = 15;
-    static int platformfeevalue = 5;
-    TextView itempriceView, deliveryfeeView, platformfeeView,totalprice, finalpriceView;
+    static final int MAX_COUNT =15;
+    static final int deliveryfeevalue = 15;
+    static final int platformfeevalue = 5;
+    TextView pricesummary, deliveryfee, platformfee, totalprice, finalprice;
+
+    NestedScrollView cartlistlayout;
+    LinearLayout emptyCartLayout;
+    LinearLayout price_layout;
+    ProgressBar loader ;
 
     /**
      * Use this factory method to create a new instance of
@@ -79,6 +97,8 @@ public class cart_screen extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        foodRepository = new FoodRepository();
+        cartManager = new CartManager();
     }
 
     @Override
@@ -87,26 +107,25 @@ public class cart_screen extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cart_screen, container, false);
 
-        TextView empty_cart_text = view.findViewById(R.id.empty_cart_text);
-        LinearLayout cart_itmes_layout = view.findViewById(R.id.linearLayout6);
-        LinearLayout price_layout = view.findViewById(R.id.price_layout);
+        cartlistlayout = view.findViewById(R.id.cartlistlayout);
+        emptyCartLayout = view.findViewById(R.id.emptyCartLayout);
+        price_layout = view.findViewById(R.id.price_layout);
+        loader = view.findViewById(R.id.loader);
 
         RecyclerView recycler_food_cart = view.findViewById(R.id.cart_recyclerview);
         recycler_food_cart.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
 
-        itempriceView = view.findViewById(R.id.itemprice);
-        deliveryfeeView = view.findViewById(R.id.delivery_price);
-        platformfeeView = view.findViewById(R.id.platform_fee);
+        pricesummary = view.findViewById(R.id.pricesummary);
+        deliveryfee = view.findViewById(R.id.delivery_fee);
+        platformfee = view.findViewById(R.id.platform_fee);
         totalprice = view.findViewById(R.id.totalprice);
-        finalpriceView = view.findViewById(R.id.finalprice);
+        finalprice = view.findViewById(R.id.finalprice);
 
-        foodCartAdapter = new Food_Cart_Adapter(getContext(), cartFoods, new OnCartActionListener() {
+        foodCartAdapter = new Food_Cart_Adapter(getContext(), new OnCartActionListener() {
             @Override
             public void onCartIncrement(Food_Item_Model model) {
-                if (model.cart_count < 10) {
-                    model.cart_count++;
-                    foodCartAdapter.notifyDataSetChanged(); // or use DiffUtil
-                    calculateTotalPrice();
+                if (model.cart_count < MAX_COUNT) {
+                    CartManager.getInstance().cartIncrement(model);
                 } else {
                     Toast.makeText(getContext(), "Maximum Item Limit reached", Toast.LENGTH_SHORT).show();
                 }
@@ -114,84 +133,84 @@ public class cart_screen extends Fragment {
 
             @Override
             public void onCartDecrement(Food_Item_Model model) {
-                model.cart_count--;
-                foodCartAdapter.notifyDataSetChanged();
-                calculateTotalPrice();
+                CartManager.getInstance().cartDecrement(model);
             }
 
             @Override
-            public void onCartRemove(Food_Item_Model model, int position) {
-                cartFoods.remove(model);
-                foodCartAdapter.notifyItemRemoved(position);
-                calculateTotalPrice();
+            public void onCartRemove(Food_Item_Model model) {
+                CartManager.getInstance().cartRemove(model);
             }
         });
 
         recycler_food_cart.setAdapter(foodCartAdapter);
+        FetchCartData();
+
 
         return view;
     }
-    public void cart_total(int final_price){
-        int finalAmount = final_price + deliveryfeevalue + platformfeevalue;
 
-        if (itempriceView != null) {
-            itempriceView.setText("₹" + final_price);
-        }
-        if (deliveryfeeView != null) {
-            deliveryfeeView.setText("₹" + deliveryfeevalue);
-        }
-        if (platformfeeView != null) {
-            platformfeeView.setText("₹" + platformfeevalue);
-        }
-        if (totalprice != null){
-            totalprice.setText("₹"+finalAmount);
-        }
-        if (finalpriceView != null) {
-            finalpriceView.setText("₹" + finalAmount);
-        }
-    }
-
-    private void calculateTotalPrice() {
-        int total = 0;
-        for (Food_Item_Model model : cartFoods) {
-            int price = Integer.parseInt(model.price.replace("₹", "").trim());
-            total += price * model.cart_count;
-        }
-
-        // Handle empty cart UI
-        if (getView() != null) {
-            TextView empty_cart_text = getView().findViewById(R.id.empty_cart_text);
-            LinearLayout cart_items_layout = getView().findViewById(R.id.linearLayout6);
-            LinearLayout price_layout = getView().findViewById(R.id.price_layout);
-
-            if (total == 0) {
-                empty_cart_text.setVisibility(View.VISIBLE);
-                cart_items_layout.setVisibility(View.GONE);
-                price_layout.setVisibility(View.GONE);
-            } else {
-                empty_cart_text.setVisibility(View.GONE);
-                cart_items_layout.setVisibility(View.VISIBLE);
-                price_layout.setVisibility(View.VISIBLE);
+    private void FetchCartData() {
+        if (!NetworkUtils.isInternetAvailable(getContext())) {
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, new NoInternetScreen())
+                        .addToBackStack(null)  // taaki retry pe back stack se pichla fragment aaye
+                        .commit();
             }
+            return;
         }
+        loader.setVisibility(View.VISIBLE);
+        emptyCartLayout.setVisibility(View.GONE);
+        cartlistlayout.setVisibility(View.GONE);
+        price_layout.setVisibility(View.GONE);
 
-        cart_total((int) total); // cast float to int for display
-    }
+        foodRepository.fetchCartFoods(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override public void onDataChange(DataSnapshot snapshot) {
+                ArrayList<Food_Item_Model> cartfoods = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Food_Item_Model food = child.getValue(Food_Item_Model.class);
+                    if (food != null) cartfoods.add(food);
+                }
+                Collections.reverse(cartfoods);
 
-    public static void gotocart(Food_Item_Model model){
-        if (!cartFoods.contains(model)){
-            cartFoods.add(model);
-        }
-    }
+                loader.setVisibility(View.VISIBLE);
+                cartlistlayout.setVisibility(View.GONE);
+                price_layout.setVisibility(View.GONE);
+                new Handler().postDelayed(() -> {
+                    loader.setVisibility(View.GONE);
+                    if (cartfoods.isEmpty()) {
+                        emptyCartLayout.setVisibility(View.VISIBLE);
+                        cartlistlayout.setVisibility(View.GONE);
+                        price_layout.setVisibility(View.GONE);
+                    } else {
+                        emptyCartLayout.setVisibility(View.GONE);
+                        cartlistlayout.setVisibility(View.VISIBLE);
+                        price_layout.setVisibility(View.VISIBLE);
 
+                        // Update the Cart food list
+                        foodCartAdapter.updateData(cartfoods);
 
-    @SuppressLint("NotifyDataSetChanged")
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (foodCartAdapter != null) {
-            foodCartAdapter.notifyDataSetChanged();
-            calculateTotalPrice();
-        }
+                        // Calculate Total Price
+                        int itemPrice = cartManager.calculateTotalPrice(cartfoods);
+                        int finalPrice = itemPrice + deliveryfeevalue + platformfeevalue;
+
+                        pricesummary.setText("₹" + itemPrice);
+                        deliveryfee.setText("₹" + deliveryfeevalue);
+                        platformfee.setText("₹" + platformfeevalue);
+                        totalprice.setText("₹" + (itemPrice + deliveryfeevalue + platformfeevalue));
+                        finalprice.setText("₹" + finalPrice);
+                    }
+                }, 800);
+            }
+            @Override public void onCancelled(DatabaseError error) {
+                Toast.makeText(getContext(), "Failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
+//                    for (Food_Item_Model item : cartfoods) {
+//                        Log.d("item", item.getFood_name());
+//                    }
+//new Handler().postDelayed(() -> loader.setVisibility(View.GONE), 1000);

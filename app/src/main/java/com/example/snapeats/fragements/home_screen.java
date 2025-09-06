@@ -1,29 +1,22 @@
 package com.example.snapeats.fragements;
 
-
-import static com.example.snapeats.fragements.cart_screen.gotocart;
-import static com.example.snapeats.fragements.wishlist_screen.gotowishlist;
-import static com.example.snapeats.repository.FoodRepository.cartFoods;
-import static com.example.snapeats.repository.FoodRepository.recommendedFoods;
-import static com.example.snapeats.repository.FoodRepository.wishlistFoods;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.snapeats.managers.CartManager;
+import com.example.snapeats.managers.WishlistManager;
+import com.example.snapeats.models.CategoriesModel;
 import com.example.snapeats.repository.FoodRepository;
 import com.example.snapeats.ui.Food_Detailed_Screen;
 import com.example.snapeats.R;
@@ -33,35 +26,33 @@ import com.example.snapeats.adapters.CategoryAdapter;
 import com.example.snapeats.adapters.Popular_food_Adapter;
 import com.example.snapeats.adapters.Recommended_Food_Adapter;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
-import com.example.snapeats.models.Categories_model;
 import com.example.snapeats.models.Food_Item_Model;
+import com.example.snapeats.utils.NetworkUtils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class home_screen extends Fragment {
 
-    ArrayList<Categories_model> categoryList = new ArrayList<>();
-    ArrayList<Food_Item_Model> popularList = new ArrayList<>();
-//    public static ArrayList<Food_Item_Model> popularFood_List = new ArrayList<>();
-//    public static ArrayList<Food_Item_Model> recommended_food_list = new ArrayList<>();
-//    public static ArrayList<Food_Item_Model> wishlist_food_item = new ArrayList<>();
-//    public static ArrayList<Food_Item_Model> cart_food_list = new ArrayList<>();
+    private CategoryAdapter categoryAdapter;
+    private Popular_food_Adapter popularFoodAdapter;
+    private Recommended_Food_Adapter recommendedFoodAdapter;
 
-    CategoryAdapter categoryAdapter;
-    Popular_food_Adapter popularFoodAdapter;
-    Recommended_Food_Adapter recommendedFoodAdapter;
-
+    private FoodRepository foodRepository;
 
     ArrayList<Food_Item_Model> allfoodlist;
 
-//    public home_screen() {
-//        // Required empty public constructor
-//    }
+    public home_screen() {
+        // Required empty public constructor
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        foodRepository = new FoodRepository();
     }
 
     @Override
@@ -89,14 +80,14 @@ public class home_screen extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
 
         // Load Categories
-        categoryList.add(new Categories_model(R.drawable.pizza,"Pizza"));
-        categoryList.add(new Categories_model(R.drawable.burger,"Burger"));
-        categoryList.add(new Categories_model(R.drawable.penne,"Pasta"));
-        categoryList.add(new Categories_model(R.drawable.cola,"Drinks"));
-        categoryList.add(new Categories_model(R.drawable.cake,"Dessert"));
-        categoryList.add(new Categories_model(R.drawable.sandwich,"Sandwich"));
+//        categoryList.add(new Categories_model(R.drawable.pizza,"Pizza"));
+//        categoryList.add(new Categories_model(R.drawable.burger,"Burger"));
+//        categoryList.add(new Categories_model(R.drawable.penne,"Pasta"));
+//        categoryList.add(new Categories_model(R.drawable.cola,"Drinks"));
+//        categoryList.add(new Categories_model(R.drawable.cake,"Dessert"));
+//        categoryList.add(new Categories_model(R.drawable.sandwich,"Sandwich"));
 
-        categoryAdapter = new CategoryAdapter(getContext(), categoryList);
+        categoryAdapter = new CategoryAdapter(getContext());
         recyclerView.setAdapter(categoryAdapter);
 
         TextView viewCategory = view.findViewById(R.id.viewCategory);
@@ -118,17 +109,13 @@ public class home_screen extends Fragment {
         });
 
 
-        RecyclerView recycler_popular_food = view.findViewById(R.id.popular_food_list);
-        recycler_popular_food.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
-        popularList = FoodRepository.getPopularFoods();
-        Log.d("popular food list",popularList.size()+"");
-        popularFoodAdapter = new Popular_food_Adapter(getContext(), FoodRepository.getPopularFoods(), new OnFoodItemActionListener() {
+        RecyclerView popularFoodRecycle = view.findViewById(R.id.popular_food_list);
+        popularFoodRecycle.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
+        popularFoodAdapter = new Popular_food_Adapter(getContext(), new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(Food_Item_Model model) {
-                if (model.isInCart()){
-                    model.cart_count++;
-                    gotocart(model);
-                    model.setInCart(true);
+                if (!model.isInCart()){
+                    CartManager.getInstance().addToCart(model);
                     Toast.makeText(view.getContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(view.getContext(), "Item Already in Cart", Toast.LENGTH_SHORT).show();
@@ -138,12 +125,11 @@ public class home_screen extends Fragment {
             @Override
             public void onToggleWishlist(Food_Item_Model model, int position) {
                 if (model.isInWishlist()) {
-                    model.setInWishlist(false);
-                    wishlistFoods.remove(model);
+                    WishlistManager.getInstance().removeWishlist(model);
                 } else {
-                    gotowishlist(model);
+                    WishlistManager.getInstance().addWishlist(model);
                 }
-                popularFoodAdapter.notifyItemChanged(position);
+                popularFoodAdapter.notifyItemChanged(position, "wishlist");
             }
 
             @Override
@@ -155,7 +141,7 @@ public class home_screen extends Fragment {
                 startActivity(intent);
             }
         });
-        recycler_popular_food.setAdapter(popularFoodAdapter);
+        popularFoodRecycle.setAdapter(popularFoodAdapter);
 
         RecyclerView recycler_recommended_food = view.findViewById(R.id.recommended_food_list);
         recycler_recommended_food.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
@@ -163,12 +149,11 @@ public class home_screen extends Fragment {
         recycler_recommended_food.setNestedScrollingEnabled(false);
         recycler_recommended_food.setHasFixedSize(false);
 
-        recommendedFoodAdapter = new Recommended_Food_Adapter(getContext(), recommendedFoods, new OnFoodItemActionListener() {
+        recommendedFoodAdapter = new Recommended_Food_Adapter(getContext(), new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(Food_Item_Model model) {
-                if (!cartFoods.contains(model)){
-                    model.cart_count++;
-                    gotocart(model);
+                if (!model.isInCart()){
+                    CartManager.getInstance().addToCart(model);
                     Toast.makeText(view.getContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(view.getContext(), "Item Already in Cart", Toast.LENGTH_SHORT).show();
@@ -178,10 +163,9 @@ public class home_screen extends Fragment {
             @Override
             public void onToggleWishlist(Food_Item_Model model, int position) {
                 if (model.isInWishlist()) {
-                    model.setInWishlist(false);
-                    wishlistFoods.remove(model);
+                    WishlistManager.getInstance().removeWishlist(model);
                 } else {
-                    gotowishlist(model);
+                    WishlistManager.getInstance().addWishlist(model);
                 }
                 recommendedFoodAdapter.notifyItemChanged(position);
             }
@@ -198,22 +182,77 @@ public class home_screen extends Fragment {
         });
         recycler_recommended_food.setAdapter(recommendedFoodAdapter);
 
+        FetchHomeData();
+
         return view;
     }
-    @SuppressLint("NotifyDataSetChanged")
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (recommendedFoodAdapter != null) {
-            recommendedFoodAdapter.notifyDataSetChanged();
-        }
-        if (popularFoodAdapter != null) {
-            popularFoodAdapter.notifyDataSetChanged();
-        }
-    }
 
-    public void refreshData() {
-        popularFoodAdapter.updateData(FoodRepository.getPopularFoods());
-        Log.d("popular refresh",FoodRepository.getPopularFoods().size()+"");
+    private void FetchHomeData() {
+        if (!NetworkUtils.isInternetAvailable(getContext())) {
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, new NoInternetScreen())
+                        .addToBackStack(null)  // taaki retry pe back stack se pichla fragment aaye
+                        .commit();
+            }
+            return;
+        }
+        //Fetch Category from Firebase
+        foodRepository.fetchCategories(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                ArrayList<CategoriesModel> categories = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    CategoriesModel category = child.getValue(CategoriesModel.class);
+                    if (category != null) {
+                        categories.add(category);
+                    }
+                }
+
+                // Now update adapter
+                categoryAdapter.updateData(categories);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getContext(), "Failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Fetch Popular Foods from Firebase
+        foodRepository.fetchPopularFoods(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                ArrayList<Food_Item_Model> popularFoods = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Food_Item_Model food = child.getValue(Food_Item_Model.class);
+                    if (food != null) popularFoods.add(food);
+                }
+                popularFoodAdapter.updateData(popularFoods);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getContext(), "Failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        //Fetch Recommended Foods from Firebase
+        foodRepository.fetchRecommendedFoods(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Food_Item_Model> recommendedFoods = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Food_Item_Model food = child.getValue(Food_Item_Model.class);
+                    if (food != null) recommendedFoods.add(food);
+                }
+                recommendedFoodAdapter.updateData(recommendedFoods);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

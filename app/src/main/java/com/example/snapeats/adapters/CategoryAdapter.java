@@ -11,18 +11,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
-import com.example.snapeats.models.Categories_model;
+import com.example.snapeats.models.CategoriesModel;
 
 import java.util.ArrayList;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     Context context;
-    ArrayList<Categories_model> categories_list;
+    ArrayList<CategoriesModel> categories_list;
 
-    public CategoryAdapter(Context context, ArrayList<Categories_model> categories_list) {
+    public CategoryAdapter(Context context) {
         this.context = context;
-        this.categories_list = categories_list;
+        categories_list = new ArrayList<>();
     }
 
     @NonNull
@@ -35,14 +36,23 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
-        Categories_model categories_model = categories_list.get(position);
-        holder.category_image.setImageResource(categories_model.image);
-        holder.category_name.setText(categories_model.name);
+        CategoriesModel categories_model = categories_list.get(position);
+        Glide.with(context)
+                .load(categories_model.getCategoryImage())
+                .into(holder.category_image);
+        //holder.category_image.setImageResource(categories_model.getCategoryImage());
+        holder.category_name.setText(categories_model.getCategoryName());
     }
 
     @Override
     public int getItemCount() {
         return categories_list.size();
+    }
+
+    public void updateData(ArrayList<CategoriesModel> categories) {
+        this.categories_list.clear();
+        this.categories_list.addAll(categories);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

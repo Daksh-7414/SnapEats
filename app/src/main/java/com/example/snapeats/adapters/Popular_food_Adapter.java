@@ -1,6 +1,7 @@
 package com.example.snapeats.adapters;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -28,10 +29,10 @@ public class Popular_food_Adapter extends RecyclerView.Adapter<Popular_food_Adap
     ArrayList<Food_Item_Model> popular_food_list;
     OnFoodItemActionListener listener;
 
-    public Popular_food_Adapter(Context context, ArrayList<Food_Item_Model> popular_food_list,OnFoodItemActionListener listener) {
+    public Popular_food_Adapter(Context context, OnFoodItemActionListener listener) {
         this.context = context;
-        this.popular_food_list = popular_food_list;
         this.listener = listener;
+        popular_food_list = new ArrayList<>();
     }
 
     @NonNull
@@ -42,6 +43,7 @@ public class Popular_food_Adapter extends RecyclerView.Adapter<Popular_food_Adap
         return viewHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull Popular_food_Adapter.ViewHolder holder, int position) {
         Food_Item_Model model = popular_food_list.get(position);
@@ -53,21 +55,21 @@ public class Popular_food_Adapter extends RecyclerView.Adapter<Popular_food_Adap
 
         holder.food_name.setText(model.food_name);
         //holder.food_restaurant.setText(model.food_restaurant_name);
-        holder.price.setText(model.price);
+        holder.price.setText("₹"+model.price);
 
-        holder.food_name.post(() -> {
-            int lineCount = holder.food_name.getLineCount();
-
-            if (lineCount > 1) {
-                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                holder.food_name.requestLayout();
-                holder.food_name.invalidate();
-            } else {
-                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 19);
-                holder.food_name.requestLayout();
-                holder.food_name.invalidate();
-            }
-        });
+//        holder.food_name.post(() -> {
+//            int lineCount = holder.food_name.getLineCount();
+//
+//            if (lineCount > 1) {
+//                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+//                holder.food_name.requestLayout();
+//                holder.food_name.invalidate();
+//            } else {
+//                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 19);
+//                holder.food_name.requestLayout();
+//                holder.food_name.invalidate();
+//            }
+//        });
 
         if (model.isInWishlist()) {
             holder.like_btn.setImageResource(R.drawable.favorite);

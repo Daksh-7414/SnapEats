@@ -2,7 +2,9 @@ package com.example.snapeats.adapters;
 
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +30,9 @@ public class Food_Cart_Adapter extends RecyclerView.Adapter<Food_Cart_Adapter.Vi
     ArrayList<Food_Item_Model> cart_food_list;
     OnCartActionListener listener;
 
-    public Food_Cart_Adapter(Context context, ArrayList<Food_Item_Model> cart_food_list, OnCartActionListener listener) {
+    public Food_Cart_Adapter(Context context, OnCartActionListener listener) {
         this.context = context;
-        this.cart_food_list = cart_food_list;
+        cart_food_list = new ArrayList<>();
         this.listener = listener;
     }
 
@@ -42,6 +44,7 @@ public class Food_Cart_Adapter extends RecyclerView.Adapter<Food_Cart_Adapter.Vi
         return viewHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Food_Item_Model model = cart_food_list.get(position);
@@ -50,11 +53,24 @@ public class Food_Cart_Adapter extends RecyclerView.Adapter<Food_Cart_Adapter.Vi
                 .into(holder.food_image);
         holder.food_name.setText(model.food_name);
         holder.food_restaurant.setText(model.food_restaurant_name);
-        holder.price.setText(model.price);
+        holder.price.setText("₹"+model.price);
         holder.cart_count.setText(String.valueOf(model.cart_count));
+        holder.food_name.post(() -> {
+            int lineCount = holder.food_name.getLineCount();
 
-        holder.price.setText("₹" + (Integer.parseInt(model.price.replace("₹","").trim()) * model.cart_count));
+            if (lineCount > 1) {
+                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
+                holder.food_name.requestLayout();
+                holder.food_name.invalidate();
+            } else {
+                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+                holder.food_name.requestLayout();
+                holder.food_name.invalidate();
+            }
+        });
 
+//        holder.price.setText("₹" + (Integer.parseInt(model.price.replace("₹","").trim()) * model.cart_count));
+        holder.price.setText("₹" + (model.price * model.cart_count));
         holder.cart_add.setOnClickListener(v ->{
             listener.onCartIncrement(model);
         });
@@ -63,7 +79,7 @@ public class Food_Cart_Adapter extends RecyclerView.Adapter<Food_Cart_Adapter.Vi
             if (model.cart_count > 1) {
                 listener.onCartDecrement(model);
             }else {
-                listener.onCartRemove(model, holder.getAdapterPosition());
+                listener.onCartRemove(model);
             }
         });
 
@@ -80,6 +96,12 @@ public class Food_Cart_Adapter extends RecyclerView.Adapter<Food_Cart_Adapter.Vi
     @Override
     public int getItemCount() {
         return cart_food_list.size();
+    }
+
+    public void updateData(ArrayList<Food_Item_Model> cartfoods) {
+        this.cart_food_list.clear();
+        this.cart_food_list.addAll(cartfoods);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

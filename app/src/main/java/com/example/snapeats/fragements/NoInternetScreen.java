@@ -80,21 +80,28 @@ public class NoInternetScreen extends Fragment {
     }
 
     private void handleRetry() {
-        // Check if network is now available
         if (NetworkUtils.isInternetAvailable(getContext())) {
             Toast.makeText(getContext(), "Network available, retrying...", Toast.LENGTH_SHORT).show();
 
-            // Trigger the full connection check and fetch
             FireBaseConnection.checkFirebaseConnection(new FireBaseConnection.FirebaseConnectionListener() {
                 @Override
                 public void onConnected() {
-                    // Fetch data on success
-                    FoodRepository.fetchFoods(() -> {
-                        // Data fetched - navigate back or refresh (e.g., load home screen)
-                        if (getActivity() instanceof MainActivity) {
-                            ((MainActivity) getActivity()).loadFrag(new home_screen(), false,"HOME");
+                    if (getActivity() != null) {
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+
+                        // Pichle fragment ko stack se nikaal aur reload kar
+                        fm.popBackStack();  // NoInternetFragment hata dega
+
+                        // Ab top par wahi fragment rahega jo pehle tha (Home/Cart/Profile etc.)
+                        Fragment currentFragment = fm.findFragmentById(R.id.container);
+
+                        if (currentFragment != null) {
+                            fm.beginTransaction()
+                                    .detach(currentFragment)
+                                    .attach(currentFragment)
+                                    .commit();
                         }
-                    });
+                    }
                 }
 
                 @Override
@@ -103,8 +110,8 @@ public class NoInternetScreen extends Fragment {
                 }
             });
         } else {
-            // Network still unavailable - show message and stay on this screen
             Toast.makeText(getContext(), "No internet connection. Please try again later.", Toast.LENGTH_SHORT).show();
         }
+
     }
 }

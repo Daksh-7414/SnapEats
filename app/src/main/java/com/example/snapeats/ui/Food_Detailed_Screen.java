@@ -1,6 +1,6 @@
 package com.example.snapeats.ui;
 
-import static com.example.snapeats.fragements.cart_screen.gotocart;
+//import static com.example.snapeats.fragements.cart_screen.gotocart;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -77,7 +77,7 @@ public class Food_Detailed_Screen extends AppCompatActivity {
             public void onClick(View v) {
                 if (model.isInCart()){
                     model.cart_count++;
-                    gotocart(model);
+                    //gotocart(model);
                     model.setInCart(true);
                     Toast.makeText(Food_Detailed_Screen.this, "Item Add to Cart", Toast.LENGTH_SHORT).show();
                 }else {

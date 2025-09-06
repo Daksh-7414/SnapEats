@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragements.wishlist_screen">
+    tools:context=".fragements.wishlist_screen"
+    android:background="@color/colorSurface">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/wishlistlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorSurface"
+        android:visibility="visible"
         >
 
         <LinearLayout
@@ -69,16 +71,18 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+                    app:layout_constraintTop_toBottomOf="@+id/imageView6"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginBottom="24dp"
                     android:gravity="center"
-                    android:text="No more items in your wishlist."
-                    android:textSize="20sp"
+                    android:text="Good food, good mood — don’t stop at one!"
+                    android:textSize="18sp"
+                    android:lineSpacingExtra="2dp"
+                    android:textStyle="bold"
                     android:textColor="@color/colorTextSecondary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -91,5 +95,48 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+    <!--  Empty Cart Layout  -->
+    <LinearLayout
+        android:id="@+id/emptyWishlistLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:visibility="invisible">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/emptywishlist"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Your Wishlist is Empty"
+            android:gravity="center"
+            android:textSize="27sp"
+            android:textColor="@color/colorTextPrimary"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:text="Tap the heart icon to save your favorite\n dishes here"
+            android:gravity="center"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+    <!--  Progress Bar Layout  -->
+    <ProgressBar
+        android:id="@+id/loader"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:indeterminateTint="@color/colorPrimary"
+        />
 
 </FrameLayout>

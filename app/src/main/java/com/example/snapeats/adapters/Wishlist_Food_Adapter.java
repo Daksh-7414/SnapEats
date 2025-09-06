@@ -1,5 +1,6 @@
 package com.example.snapeats.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -26,9 +27,9 @@ public class Wishlist_Food_Adapter extends RecyclerView.Adapter<Wishlist_Food_Ad
     OnFoodItemActionListener listener;
 
 
-    public Wishlist_Food_Adapter(Context context, ArrayList<Food_Item_Model> wishlist_food_item, OnFoodItemActionListener listener) {
+    public Wishlist_Food_Adapter(Context context, OnFoodItemActionListener listener) {
         this.context = context;
-        this.wishlist_food_item = wishlist_food_item;
+        wishlist_food_item = new ArrayList<>();
         this.listener = listener;
     }
 
@@ -40,6 +41,7 @@ public class Wishlist_Food_Adapter extends RecyclerView.Adapter<Wishlist_Food_Ad
         return viewHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Food_Item_Model model = wishlist_food_item.get(position);
@@ -48,13 +50,13 @@ public class Wishlist_Food_Adapter extends RecyclerView.Adapter<Wishlist_Food_Ad
                 .into(holder.food_image);
         holder.food_name.setText(model.food_name);
         holder.food_restaurant.setText(model.food_restaurant_name);
-        holder.price.setText(model.price);
+        holder.price.setText("₹"+model.price);
         holder.like_btn.setImageResource(R.drawable.favorite);
         holder.food_name.post(() -> {
             int lineCount = holder.food_name.getLineCount();
 
             if (lineCount > 1) {
-                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 19);
+                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
                 holder.food_name.requestLayout();
                 holder.food_name.invalidate();
             } else {
@@ -79,6 +81,12 @@ public class Wishlist_Food_Adapter extends RecyclerView.Adapter<Wishlist_Food_Ad
     @Override
     public int getItemCount() {
         return wishlist_food_item.size();
+    }
+
+    public void updateData(ArrayList<Food_Item_Model> wishlistfoods) {
+        this.wishlist_food_item.clear();
+        this.wishlist_food_item.addAll(wishlistfoods);
+        notifyDataSetChanged();
     }
 
 

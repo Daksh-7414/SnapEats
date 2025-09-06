@@ -1,6 +1,7 @@
 package com.example.snapeats.adapters;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -27,9 +28,9 @@ public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_F
     ArrayList<Food_Item_Model> recommended_food_list;
     OnFoodItemActionListener listener;
 
-    public Recommended_Food_Adapter(Context context, ArrayList<Food_Item_Model> recommended_food_list, OnFoodItemActionListener listener) {
+    public Recommended_Food_Adapter(Context context, OnFoodItemActionListener listener) {
         this.context = context;
-        this.recommended_food_list = recommended_food_list;
+        recommended_food_list = new ArrayList<>();
         this.listener = listener;
     }
 
@@ -41,6 +42,7 @@ public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_F
         return viewHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull Recommended_Food_Adapter.ViewHolder holder, int position) {
         Food_Item_Model model = recommended_food_list.get(position);
@@ -49,7 +51,7 @@ public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_F
                 .into(holder.food_image);
         holder.food_name.setText(model.food_name);
         holder.food_restaurant.setText(model.food_restaurant_name);
-        holder.price.setText(model.price);
+        holder.price.setText("₹"+model.price);
 
         holder.food_name.post(() -> {
             int lineCount = holder.food_name.getLineCount();
@@ -98,6 +100,12 @@ public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_F
     @Override
     public int getItemCount() {
         return recommended_food_list.size();
+    }
+
+    public void updateData(ArrayList<Food_Item_Model> recommendedFoods) {
+        this.recommended_food_list.clear();
+        this.recommended_food_list.addAll(recommendedFoods);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

@@ -12,7 +12,7 @@ public class Food_Item_Model implements Serializable {
     public String food_name;
     public String food_restaurant_name;
     public String description;
-    public String price;
+    public int price;
     public String category;
     public float rating;
     public int cart_count;
@@ -65,11 +65,11 @@ public class Food_Item_Model implements Serializable {
         this.description = description;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
