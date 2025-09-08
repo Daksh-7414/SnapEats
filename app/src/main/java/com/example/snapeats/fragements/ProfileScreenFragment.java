@@ -12,10 +12,10 @@ import com.example.snapeats.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link profile_screen#newInstance} factory method to
+ * Use the {@link ProfileScreenFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class profile_screen extends Fragment {
+public class ProfileScreenFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class profile_screen extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public profile_screen() {
+    public ProfileScreenFragment() {
         // Required empty public constructor
     }
 
@@ -42,8 +42,8 @@ public class profile_screen extends Fragment {
      * @return A new instance of fragment profile_screen.
      */
     // TODO: Rename and change types and number of parameters
-    public static profile_screen newInstance(String param1, String param2) {
-        profile_screen fragment = new profile_screen();
+    public static ProfileScreenFragment newInstance(String param1, String param2) {
+        ProfileScreenFragment fragment = new ProfileScreenFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

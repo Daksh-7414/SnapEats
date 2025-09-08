@@ -1,5 +1,7 @@
 package com.example.snapeats.adapters;
 
+
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.TypedValue;
@@ -16,27 +18,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
-import com.example.snapeats.interfaces.OnFoodItemActionListener;
-import com.example.snapeats.models.Food_Item_Model;
+import com.example.snapeats.interfaces.OnCartActionListener;
+import com.example.snapeats.models.FoodItemModel;
+
 
 import java.util.ArrayList;
 
-public class Wishlist_Food_Adapter extends RecyclerView.Adapter<Wishlist_Food_Adapter.ViewHolder> {
+public class FoodCartAdapter extends RecyclerView.Adapter<FoodCartAdapter.ViewHolder>{
+
     Context context;
-    ArrayList<Food_Item_Model> wishlist_food_item;
-    OnFoodItemActionListener listener;
+    ArrayList<FoodItemModel> cart_food_list;
+    OnCartActionListener listener;
 
-
-    public Wishlist_Food_Adapter(Context context, OnFoodItemActionListener listener) {
+    public FoodCartAdapter(Context context, OnCartActionListener listener) {
         this.context = context;
-        wishlist_food_item = new ArrayList<>();
+        cart_food_list = new ArrayList<>();
         this.listener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recommended_food_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.cart_food_layout,parent,false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -44,14 +47,14 @@ public class Wishlist_Food_Adapter extends RecyclerView.Adapter<Wishlist_Food_Ad
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Food_Item_Model model = wishlist_food_item.get(position);
+        FoodItemModel model = cart_food_list.get(position);
         Glide.with(context)
                 .load(model.getFood_image())
                 .into(holder.food_image);
         holder.food_name.setText(model.food_name);
         holder.food_restaurant.setText(model.food_restaurant_name);
         holder.price.setText("₹"+model.price);
-        holder.like_btn.setImageResource(R.drawable.favorite);
+        holder.cart_count.setText(String.valueOf(model.cart_count));
         holder.food_name.post(() -> {
             int lineCount = holder.food_name.getLineCount();
 
@@ -66,46 +69,58 @@ public class Wishlist_Food_Adapter extends RecyclerView.Adapter<Wishlist_Food_Ad
             }
         });
 
-        holder.like_btn.setOnClickListener(v -> listener.onToggleWishlist(model,position));
+//        holder.price.setText("₹" + (Integer.parseInt(model.price.replace("₹","").trim()) * model.cart_count));
+        holder.price.setText("₹" + (model.price * model.cart_count));
+        holder.cart_add.setOnClickListener(v ->{
+            listener.onCartIncrement(model);
+        });
 
-        holder.addtocart.setOnClickListener(v -> listener.onAddToCart(model));
-
-        holder.wishlist_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onFoodItemClick(model);
+        holder.cart_minus.setOnClickListener(v -> {
+            if (model.cart_count > 1) {
+                listener.onCartDecrement(model);
+            }else {
+                listener.onCartRemove(model);
             }
         });
+
+        holder.cart_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // listener.onFoodItemClick(model);
+            }
+        });
+
     }
+
 
     @Override
     public int getItemCount() {
-        return wishlist_food_item.size();
+        return cart_food_list.size();
     }
 
-    public void updateData(ArrayList<Food_Item_Model> wishlistfoods) {
-        this.wishlist_food_item.clear();
-        this.wishlist_food_item.addAll(wishlistfoods);
+    public void updateData(ArrayList<FoodItemModel> cartfoods) {
+        this.cart_food_list.clear();
+        this.cart_food_list.addAll(cartfoods);
         notifyDataSetChanged();
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView food_image,like_btn;
-        TextView food_name,food_restaurant,price;
-        ImageButton addtocart;
-        ConstraintLayout wishlist_layout;
+        ImageView food_image;
+        TextView food_name,food_restaurant,price,cart_count;
+        ImageButton cart_minus,cart_add;
+        ConstraintLayout cart_layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            food_image = itemView.findViewById(R.id.recommended_food_image);
-            food_name = itemView.findViewById(R.id.recommended_food_name);
+            food_image = itemView.findViewById(R.id.cart_food_image);
+            food_name = itemView.findViewById(R.id.cart_food_name);
             food_restaurant = itemView.findViewById(R.id.food_restaurant_name);
-            price = itemView.findViewById(R.id.recommended_food_price);
-            like_btn = itemView.findViewById(R.id.like_btn);
-            addtocart = itemView.findViewById(R.id.addtocart);
-            wishlist_layout = itemView.findViewById(R.id.recommended_layout);
+            price = itemView.findViewById(R.id.cart_food_price);
+            cart_count = itemView.findViewById(R.id.cart_count);
+            cart_minus = itemView.findViewById(R.id.cart_minus);
+            cart_add = itemView.findViewById(R.id.cart_add);
+            cart_layout = itemView.findViewById(R.id.cart_layout);
         }
     }
 }

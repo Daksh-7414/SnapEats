@@ -9,7 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class SnapeatsApplication extends Application {
+public class SnapEatsApplication extends Application {
 
     private static FirebaseDatabase firebaseDatabase;
     private static boolean isFirebaseConnected = false;
@@ -31,10 +31,10 @@ public class SnapeatsApplication extends Application {
                 Boolean connected = snapshot.getValue(Boolean.class);
                 if (connected != null && connected) {
                     isFirebaseConnected = true;
-                    Log.d("SnapEatsApp", "✅ Firebase Connected");
+                    Log.d("SnapEatsApp", "Firebase Connected");
                 } else {
                     isFirebaseConnected = false;
-                    Log.d("SnapEatsApp", "❌ Firebase Disconnected");
+                    Log.d("SnapEatsApp", "Firebase Disconnected");
                 }
             }
 

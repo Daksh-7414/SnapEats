@@ -16,8 +16,8 @@
     <color name="colorBackground">#FFFFFF</color> <!-- Use in: Full app background -->
 
     <!-- ⚪ Surface / Card background -->
-    <color name="colorSurface">#F6F6F6</color> <!-- Use in: Scroll areas, containers, form areas -->
-    <color name="colorcard">#FCFCFC</color> <!-- Use in: Scroll areas, containers, form areas -->
+    <color name="colorSurface">#f5f5f5</color> <!-- Use in: Scroll areas, containers, form areas -->
+    <color name="colorcard">#FaFaFa</color> <!-- Use in: Scroll areas, containers, form areas -->
 
     <!-- 🖤 Primary Text -->
     <color name="colorTextPrimary">#1F272D</color> <!-- Use in: Headlines, burger name, headings -->
@@ -32,7 +32,7 @@
     <color name="colorError">#E63946</color> <!-- Use in: Logout, Delete, Remove buttons -->
 
     <!-- ⚙️ Inactive Icons -->
-    <color name="colorIconInactive">#9E9E9E</color> <!-- Use in: Bottom nav inactive state -->
+    <color name="colorIconInactive">#8C8C8C</color> <!-- Use in: Bottom nav inactive state -->
 
     <!-- ⚙️ Neutral Border -->
     <color name="colorBorderNeutral">#D3D3D3</color> <!-- Use in: Quantity buttons border, list item separators -->

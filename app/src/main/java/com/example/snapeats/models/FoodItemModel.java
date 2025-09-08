@@ -1,12 +1,9 @@
 package com.example.snapeats.models;
 
 
-import com.google.firebase.database.PropertyName;
-
 import java.io.Serializable;
-import java.util.Objects;
 
-public class Food_Item_Model implements Serializable {
+public class FoodItemModel implements Serializable {
     private String id;
     public String food_image;
     public String food_name;
@@ -21,7 +18,7 @@ public class Food_Item_Model implements Serializable {
     public boolean isPopular;
     public boolean isRecommended;
 
-    public Food_Item_Model() {
+    public FoodItemModel() {
     }
 
     public String getId() {

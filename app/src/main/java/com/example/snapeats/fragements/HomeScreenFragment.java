@@ -18,15 +18,15 @@ import com.example.snapeats.managers.CartManager;
 import com.example.snapeats.managers.WishlistManager;
 import com.example.snapeats.models.CategoriesModel;
 import com.example.snapeats.repository.FoodRepository;
-import com.example.snapeats.ui.Food_Detailed_Screen;
+import com.example.snapeats.ui.FoodDetailScreen;
 import com.example.snapeats.R;
-import com.example.snapeats.ui.ViewCategory;
-import com.example.snapeats.ui.ViewPopularFood;
+import com.example.snapeats.ui.ViewCategoryActivity;
+import com.example.snapeats.ui.ViewPopularActivity;
 import com.example.snapeats.adapters.CategoryAdapter;
-import com.example.snapeats.adapters.Popular_food_Adapter;
-import com.example.snapeats.adapters.Recommended_Food_Adapter;
+import com.example.snapeats.adapters.PopularFoodAdapter;
+import com.example.snapeats.adapters.RecommendedFoodAdapter;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
-import com.example.snapeats.models.Food_Item_Model;
+import com.example.snapeats.models.FoodItemModel;
 import com.example.snapeats.utils.NetworkUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,17 +35,14 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class home_screen extends Fragment {
+public class HomeScreenFragment extends Fragment {
 
     private CategoryAdapter categoryAdapter;
-    private Popular_food_Adapter popularFoodAdapter;
-    private Recommended_Food_Adapter recommendedFoodAdapter;
+    private PopularFoodAdapter popularFoodAdapter;
+    private RecommendedFoodAdapter recommendedFoodAdapter;
 
     private FoodRepository foodRepository;
-
-    ArrayList<Food_Item_Model> allfoodlist;
-
-    public home_screen() {
+    public HomeScreenFragment() {
         // Required empty public constructor
     }
 
@@ -79,14 +76,6 @@ public class home_screen extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.categoriesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
 
-        // Load Categories
-//        categoryList.add(new Categories_model(R.drawable.pizza,"Pizza"));
-//        categoryList.add(new Categories_model(R.drawable.burger,"Burger"));
-//        categoryList.add(new Categories_model(R.drawable.penne,"Pasta"));
-//        categoryList.add(new Categories_model(R.drawable.cola,"Drinks"));
-//        categoryList.add(new Categories_model(R.drawable.cake,"Dessert"));
-//        categoryList.add(new Categories_model(R.drawable.sandwich,"Sandwich"));
-
         categoryAdapter = new CategoryAdapter(getContext());
         recyclerView.setAdapter(categoryAdapter);
 
@@ -94,7 +83,7 @@ public class home_screen extends Fragment {
         viewCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent viewCat = new Intent(getContext(), ViewCategory.class);
+                Intent viewCat = new Intent(getContext(), ViewCategoryActivity.class);
                 startActivity(viewCat);
             }
         });
@@ -103,7 +92,7 @@ public class home_screen extends Fragment {
         viewPopular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent viewPop = new Intent(getContext(), ViewPopularFood.class);
+                Intent viewPop = new Intent(getContext(), ViewPopularActivity.class);
                 startActivity(viewPop); // <-- You missed this line
             }
         });
@@ -111,9 +100,9 @@ public class home_screen extends Fragment {
 
         RecyclerView popularFoodRecycle = view.findViewById(R.id.popular_food_list);
         popularFoodRecycle.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
-        popularFoodAdapter = new Popular_food_Adapter(getContext(), new OnFoodItemActionListener() {
+        popularFoodAdapter = new PopularFoodAdapter(getContext(), new OnFoodItemActionListener() {
             @Override
-            public void onAddToCart(Food_Item_Model model) {
+            public void onAddToCart(FoodItemModel model) {
                 if (!model.isInCart()){
                     CartManager.getInstance().addToCart(model);
                     Toast.makeText(view.getContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
@@ -123,7 +112,7 @@ public class home_screen extends Fragment {
             }
 
             @Override
-            public void onToggleWishlist(Food_Item_Model model, int position) {
+            public void onToggleWishlist(FoodItemModel model, int position) {
                 if (model.isInWishlist()) {
                     WishlistManager.getInstance().removeWishlist(model);
                 } else {
@@ -133,10 +122,10 @@ public class home_screen extends Fragment {
             }
 
             @Override
-            public void onFoodItemClick(Food_Item_Model model) {
+            public void onFoodItemClick(FoodItemModel model) {
                 Gson gson = new Gson();
                 String json = gson.toJson(model);
-                Intent intent = new Intent(getContext(), Food_Detailed_Screen.class);
+                Intent intent = new Intent(getContext(), FoodDetailScreen.class);
                 intent.putExtra("foodModel", json);
                 startActivity(intent);
             }
@@ -149,9 +138,9 @@ public class home_screen extends Fragment {
         recycler_recommended_food.setNestedScrollingEnabled(false);
         recycler_recommended_food.setHasFixedSize(false);
 
-        recommendedFoodAdapter = new Recommended_Food_Adapter(getContext(), new OnFoodItemActionListener() {
+        recommendedFoodAdapter = new RecommendedFoodAdapter(getContext(), new OnFoodItemActionListener() {
             @Override
-            public void onAddToCart(Food_Item_Model model) {
+            public void onAddToCart(FoodItemModel model) {
                 if (!model.isInCart()){
                     CartManager.getInstance().addToCart(model);
                     Toast.makeText(view.getContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
@@ -161,7 +150,7 @@ public class home_screen extends Fragment {
             }
 
             @Override
-            public void onToggleWishlist(Food_Item_Model model, int position) {
+            public void onToggleWishlist(FoodItemModel model, int position) {
                 if (model.isInWishlist()) {
                     WishlistManager.getInstance().removeWishlist(model);
                 } else {
@@ -171,10 +160,10 @@ public class home_screen extends Fragment {
             }
 
             @Override
-            public void onFoodItemClick(Food_Item_Model model) {
+            public void onFoodItemClick(FoodItemModel model) {
                 Gson gson = new Gson();
                 String json = gson.toJson(model);
-                Intent intent = new Intent(getContext(), Food_Detailed_Screen.class);
+                Intent intent = new Intent(getContext(), FoodDetailScreen.class);
                 intent.putExtra("foodModel", json);
                 startActivity(intent);
             }
@@ -193,7 +182,7 @@ public class home_screen extends Fragment {
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.container, new NoInternetScreen())
-                        .addToBackStack(null)  // taaki retry pe back stack se pichla fragment aaye
+                        .addToBackStack(null) 
                         .commit();
             }
             return;
@@ -224,9 +213,9 @@ public class home_screen extends Fragment {
         foodRepository.fetchPopularFoods(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                ArrayList<Food_Item_Model> popularFoods = new ArrayList<>();
+                ArrayList<FoodItemModel> popularFoods = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    Food_Item_Model food = child.getValue(Food_Item_Model.class);
+                    FoodItemModel food = child.getValue(FoodItemModel.class);
                     if (food != null) popularFoods.add(food);
                 }
                 popularFoodAdapter.updateData(popularFoods);
@@ -241,9 +230,9 @@ public class home_screen extends Fragment {
         foodRepository.fetchRecommendedFoods(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Food_Item_Model> recommendedFoods = new ArrayList<>();
+                ArrayList<FoodItemModel> recommendedFoods = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    Food_Item_Model food = child.getValue(Food_Item_Model.class);
+                    FoodItemModel food = child.getValue(FoodItemModel.class);
                     if (food != null) recommendedFoods.add(food);
                 }
                 recommendedFoodAdapter.updateData(recommendedFoods);

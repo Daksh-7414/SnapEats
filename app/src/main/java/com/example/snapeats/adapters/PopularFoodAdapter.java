@@ -3,33 +3,31 @@ package com.example.snapeats.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
-import com.example.snapeats.models.Food_Item_Model;
+import com.example.snapeats.models.FoodItemModel;
 
 import java.util.ArrayList;
 
-public class Popular_food_Adapter extends RecyclerView.Adapter<Popular_food_Adapter.ViewHolder>{
+public class PopularFoodAdapter extends RecyclerView.Adapter<PopularFoodAdapter.ViewHolder>{
 
     Context context;
-    ArrayList<Food_Item_Model> popular_food_list;
+    ArrayList<FoodItemModel> popular_food_list;
     OnFoodItemActionListener listener;
 
-    public Popular_food_Adapter(Context context, OnFoodItemActionListener listener) {
+    public PopularFoodAdapter(Context context, OnFoodItemActionListener listener) {
         this.context = context;
         this.listener = listener;
         popular_food_list = new ArrayList<>();
@@ -45,8 +43,8 @@ public class Popular_food_Adapter extends RecyclerView.Adapter<Popular_food_Adap
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull Popular_food_Adapter.ViewHolder holder, int position) {
-        Food_Item_Model model = popular_food_list.get(position);
+    public void onBindViewHolder(@NonNull PopularFoodAdapter.ViewHolder holder, int position) {
+        FoodItemModel model = popular_food_list.get(position);
 //        holder.food_image.setImageResource(model.food_image);
 
         Glide.with(context)
@@ -104,7 +102,7 @@ public class Popular_food_Adapter extends RecyclerView.Adapter<Popular_food_Adap
         return popular_food_list.size();
     }
 
-    public void updateData(ArrayList<Food_Item_Model> popularFoods) {
+    public void updateData(ArrayList<FoodItemModel> popularFoods) {
         this.popular_food_list.clear();
         this.popular_food_list.addAll(popularFoods);
         notifyDataSetChanged();
@@ -114,7 +112,7 @@ public class Popular_food_Adapter extends RecyclerView.Adapter<Popular_food_Adap
         ImageView food_image,like_btn;
         TextView food_name,food_restaurant,price;
         ImageButton addtocart;
-        ConstraintLayout popular_layout;
+        RelativeLayout popular_layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -3,32 +3,31 @@ package com.example.snapeats.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
-import com.example.snapeats.models.Food_Item_Model;
+import com.example.snapeats.models.FoodItemModel;
 
 import java.util.ArrayList;
 
-public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_Food_Adapter.ViewHolder> {
+public class RecommendedFoodAdapter extends RecyclerView.Adapter<RecommendedFoodAdapter.ViewHolder> {
 
     Context context;
-    ArrayList<Food_Item_Model> recommended_food_list;
+    ArrayList<FoodItemModel> recommended_food_list;
     OnFoodItemActionListener listener;
 
-    public Recommended_Food_Adapter(Context context, OnFoodItemActionListener listener) {
+    public RecommendedFoodAdapter(Context context, OnFoodItemActionListener listener) {
         this.context = context;
         recommended_food_list = new ArrayList<>();
         this.listener = listener;
@@ -36,7 +35,7 @@ public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_F
 
     @NonNull
     @Override
-    public Recommended_Food_Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecommendedFoodAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.recommended_food_layout,parent,false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -44,8 +43,8 @@ public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_F
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull Recommended_Food_Adapter.ViewHolder holder, int position) {
-        Food_Item_Model model = recommended_food_list.get(position);
+    public void onBindViewHolder(@NonNull RecommendedFoodAdapter.ViewHolder holder, int position) {
+        FoodItemModel model = recommended_food_list.get(position);
         Glide.with(context)
                 .load(model.getFood_image())
                 .into(holder.food_image);
@@ -53,19 +52,19 @@ public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_F
         holder.food_restaurant.setText(model.food_restaurant_name);
         holder.price.setText("₹"+model.price);
 
-        holder.food_name.post(() -> {
-            int lineCount = holder.food_name.getLineCount();
-
-            if (lineCount > 1) {
-                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 19);
-                holder.food_name.requestLayout();
-                holder.food_name.invalidate();
-            } else {
-                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-                holder.food_name.requestLayout();
-                holder.food_name.invalidate();
-            }
-        });
+//        holder.food_name.post(() -> {
+//            int lineCount = holder.food_name.getLineCount();
+//
+//            if (lineCount > 1) {
+//                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 19);
+//                holder.food_name.requestLayout();
+//                holder.food_name.invalidate();
+//            } else {
+//                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+//                holder.food_name.requestLayout();
+//                holder.food_name.invalidate();
+//            }
+//        });
 
 
         if (model.isInWishlist()) {
@@ -102,7 +101,7 @@ public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_F
         return recommended_food_list.size();
     }
 
-    public void updateData(ArrayList<Food_Item_Model> recommendedFoods) {
+    public void updateData(ArrayList<FoodItemModel> recommendedFoods) {
         this.recommended_food_list.clear();
         this.recommended_food_list.addAll(recommendedFoods);
         notifyDataSetChanged();
@@ -113,7 +112,7 @@ public class Recommended_Food_Adapter extends RecyclerView.Adapter<Recommended_F
         ImageView food_image,like_btn;
         TextView food_name,food_restaurant,price;
         ImageButton addtocart;
-        ConstraintLayout recommended_layout;
+        RelativeLayout recommended_layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

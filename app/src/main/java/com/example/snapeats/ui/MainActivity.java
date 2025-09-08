@@ -4,24 +4,18 @@ package com.example.snapeats.ui;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.snapeats.R;
-import com.example.snapeats.firebase.FireBaseConnection;
 import com.example.snapeats.fragements.NoInternetScreen;
-import com.example.snapeats.fragements.cart_screen;
-import com.example.snapeats.fragements.home_screen;
-import com.example.snapeats.fragements.profile_screen;
-import com.example.snapeats.fragements.wishlist_screen;
-import com.example.snapeats.repository.FoodRepository;
-import com.example.snapeats.utils.NetworkUtils;
+import com.example.snapeats.fragements.CartScreenFragment;
+import com.example.snapeats.fragements.HomeScreenFragment;
+import com.example.snapeats.fragements.ProfileScreenFragment;
+import com.example.snapeats.fragements.WishlistScreenFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 
@@ -80,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
             int id = item.getItemId();
             selectedItemId = id;
             if (id == R.id.nav_home) {
-                loadFrag(new home_screen(), false,"HOME");
+                loadFrag(new HomeScreenFragment(), false,"HOME");
             } else if (id == R.id.nav_wishlist) {
-                loadFrag(new wishlist_screen(), false,"LIKE");
+                loadFrag(new WishlistScreenFragment(), false,"LIKE");
             } else if (id == R.id.nav_cart) {
-                loadFrag(new cart_screen(), false,"CART");
+                loadFrag(new CartScreenFragment(), false,"CART");
             } else {
-                loadFrag(new profile_screen(), true,"PROFILE");
+                loadFrag(new ProfileScreenFragment(), true,"PROFILE");
             }
             return true;
         });

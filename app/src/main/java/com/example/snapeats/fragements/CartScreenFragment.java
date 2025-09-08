@@ -11,22 +11,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.snapeats.R;
-import com.example.snapeats.adapters.Food_Cart_Adapter;
+import com.example.snapeats.adapters.FoodCartAdapter;
 import com.example.snapeats.interfaces.OnCartActionListener;
 import com.example.snapeats.managers.CartManager;
-import com.example.snapeats.models.Food_Cart_Model;
-import com.example.snapeats.models.Food_Item_Model;
+import com.example.snapeats.models.FoodItemModel;
 import com.example.snapeats.repository.FoodRepository;
 import com.example.snapeats.utils.NetworkUtils;
 import com.google.firebase.database.DataSnapshot;
@@ -34,15 +31,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link cart_screen#newInstance} factory method to
+ * Use the {@link CartScreenFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class cart_screen extends Fragment {
+public class CartScreenFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,12 +49,12 @@ public class cart_screen extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public cart_screen() {
+    public CartScreenFragment() {
         // Required empty public constructor
     }
 
-    ArrayList<Food_Item_Model> foodCartModelArrayList = new ArrayList<>();
-    Food_Cart_Adapter foodCartAdapter;
+    ArrayList<FoodItemModel> foodCartModelArrayList = new ArrayList<>();
+    FoodCartAdapter foodCartAdapter;
     private FoodRepository foodRepository;
     CartManager cartManager;
 
@@ -81,8 +77,8 @@ public class cart_screen extends Fragment {
      * @return A new instance of fragment cart_screen.
      */
     // TODO: Rename and change types and number of parameters
-    public static cart_screen newInstance(String param1, String param2) {
-        cart_screen fragment = new cart_screen();
+    public static CartScreenFragment newInstance(String param1, String param2) {
+        CartScreenFragment fragment = new CartScreenFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -121,9 +117,9 @@ public class cart_screen extends Fragment {
         totalprice = view.findViewById(R.id.totalprice);
         finalprice = view.findViewById(R.id.finalprice);
 
-        foodCartAdapter = new Food_Cart_Adapter(getContext(), new OnCartActionListener() {
+        foodCartAdapter = new FoodCartAdapter(getContext(), new OnCartActionListener() {
             @Override
-            public void onCartIncrement(Food_Item_Model model) {
+            public void onCartIncrement(FoodItemModel model) {
                 if (model.cart_count < MAX_COUNT) {
                     CartManager.getInstance().cartIncrement(model);
                 } else {
@@ -132,12 +128,12 @@ public class cart_screen extends Fragment {
             }
 
             @Override
-            public void onCartDecrement(Food_Item_Model model) {
+            public void onCartDecrement(FoodItemModel model) {
                 CartManager.getInstance().cartDecrement(model);
             }
 
             @Override
-            public void onCartRemove(Food_Item_Model model) {
+            public void onCartRemove(FoodItemModel model) {
                 CartManager.getInstance().cartRemove(model);
             }
         });
@@ -168,9 +164,9 @@ public class cart_screen extends Fragment {
         foodRepository.fetchCartFoods(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override public void onDataChange(DataSnapshot snapshot) {
-                ArrayList<Food_Item_Model> cartfoods = new ArrayList<>();
+                ArrayList<FoodItemModel> cartfoods = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    Food_Item_Model food = child.getValue(Food_Item_Model.class);
+                    FoodItemModel food = child.getValue(FoodItemModel.class);
                     if (food != null) cartfoods.add(food);
                 }
                 Collections.reverse(cartfoods);

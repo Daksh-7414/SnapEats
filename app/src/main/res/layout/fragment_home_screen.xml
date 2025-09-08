@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/home_fragement"
-    tools:context=".fragements.home_screen"
+    tools:context=".fragements.HomeScreenFragment"
     android:background="@color/colorSurface">
 
     <androidx.core.widget.NestedScrollView

@@ -16,10 +16,10 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
-import com.example.snapeats.models.Food_Item_Model;
+import com.example.snapeats.models.FoodItemModel;
 import com.google.gson.Gson;
 
-public class Food_Detailed_Screen extends AppCompatActivity {
+public class FoodDetailScreen extends AppCompatActivity {
 
     ImageView img;
     TextView food_name,restaurant_name;
@@ -56,7 +56,7 @@ public class Food_Detailed_Screen extends AppCompatActivity {
 
         String json = getIntent().getStringExtra("foodModel");
         Gson gson = new Gson();
-        Food_Item_Model model = gson.fromJson(json, Food_Item_Model.class);
+        FoodItemModel model = gson.fromJson(json, FoodItemModel.class);
 
         try {
             Glide.with(this)
@@ -79,9 +79,9 @@ public class Food_Detailed_Screen extends AppCompatActivity {
                     model.cart_count++;
                     //gotocart(model);
                     model.setInCart(true);
-                    Toast.makeText(Food_Detailed_Screen.this, "Item Add to Cart", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FoodDetailScreen.this, "Item Add to Cart", Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(Food_Detailed_Screen.this, "Item Already in Cart", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FoodDetailScreen.this, "Item Already in Cart", Toast.LENGTH_SHORT).show();
                 }
             }
         });

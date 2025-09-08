@@ -8,13 +8,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.snapeats.R;
 
-public class SnapEatsSplash extends AppCompatActivity {
+public class SplashScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snapeats_splash);
-        Intent ihome = new Intent(SnapEatsSplash.this, MainActivity.class);
+        Intent ihome = new Intent(SplashScreen.this, MainActivity.class);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
