@@ -36,7 +36,7 @@ public class WishlistFoodAdapter extends RecyclerView.Adapter<WishlistFoodAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recommended_food_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.horizontal_food_card,parent,false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -52,19 +52,6 @@ public class WishlistFoodAdapter extends RecyclerView.Adapter<WishlistFoodAdapte
         holder.food_restaurant.setText(model.food_restaurant_name);
         holder.price.setText("₹"+model.price);
         holder.like_btn.setImageResource(R.drawable.favorite);
-        holder.food_name.post(() -> {
-            int lineCount = holder.food_name.getLineCount();
-
-            if (lineCount > 1) {
-                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
-                holder.food_name.requestLayout();
-                holder.food_name.invalidate();
-            } else {
-                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-                holder.food_name.requestLayout();
-                holder.food_name.invalidate();
-            }
-        });
 
         holder.like_btn.setOnClickListener(v -> listener.onToggleWishlist(model,position));
 

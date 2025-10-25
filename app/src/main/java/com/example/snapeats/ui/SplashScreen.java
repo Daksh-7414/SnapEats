@@ -6,6 +6,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.snapeats.OnboardingActivity;
 import com.example.snapeats.R;
 
 public class SplashScreen extends AppCompatActivity {
@@ -14,7 +15,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snapeats_splash);
-        Intent ihome = new Intent(SplashScreen.this, MainActivity.class);
+        Intent ihome = new Intent(SplashScreen.this, OnboardingActivity.class);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

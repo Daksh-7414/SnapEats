@@ -7,6 +7,7 @@ package com.example.snapeats.fragements;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.snapeats.bottomsheets.FoodDetailBottomSheet;
 import com.example.snapeats.managers.CartManager;
 import com.example.snapeats.managers.WishlistManager;
 import com.example.snapeats.repository.FoodRepository;
@@ -128,11 +130,8 @@ public class WishlistScreenFragment extends Fragment {
 
             @Override
             public void onFoodItemClick(FoodItemModel model) {
-                Gson gson = new Gson();
-                String json = gson.toJson(model);
-                Intent intent = new Intent(getContext(), FoodDetailScreen.class);
-                intent.putExtra("foodModel", json);
-                startActivity(intent);
+                FoodDetailBottomSheet bottomSheet = FoodDetailBottomSheet.newInstance(model);
+                bottomSheet.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), "FoodDetailBottomSheet");
             }
         });
         recycler_wishlist_food.setAdapter(wishlist_food_adapter);

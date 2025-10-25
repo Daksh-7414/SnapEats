@@ -33,26 +33,26 @@ public class FoodDetailScreen extends AppCompatActivity {
         setContentView(R.layout.activity_food_detailed_screen);
 
         img = findViewById(R.id.food_image);
-        food_name = findViewById(R.id.food_name);
-        restaurant_name = findViewById(R.id.food_restaurant_name);
-        food_description = findViewById(R.id.food_description);
-        food_price_top = findViewById(R.id.food_price_top);
-        food_price_down = findViewById(R.id.food_price);
-
-
-        description_btn = findViewById(R.id.description_btn);
-        description_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (food_description.getVisibility() == View.VISIBLE) {
-                    food_description.setVisibility(View.GONE);
-                    description_btn.setRotation(270);
-                }else {
-                    food_description.setVisibility(View.VISIBLE);
-                    description_btn.setRotation(90);
-                }
-            }
-        });
+//        food_name = findViewById(R.id.food_name);
+//        restaurant_name = findViewById(R.id.food_restaurant_name);
+//        food_description = findViewById(R.id.food_description);
+//        food_price_top = findViewById(R.id.food_price_top);
+//        food_price_down = findViewById(R.id.food_price);
+//
+//
+//        description_btn = findViewById(R.id.description_btn);
+//        description_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (food_description.getVisibility() == View.VISIBLE) {
+//                    food_description.setVisibility(View.GONE);
+//                    description_btn.setRotation(270);
+//                }else {
+//                    food_description.setVisibility(View.VISIBLE);
+//                    description_btn.setRotation(90);
+//                }
+//            }
+//        });
 
         String json = getIntent().getStringExtra("foodModel");
         Gson gson = new Gson();
@@ -71,20 +71,20 @@ public class FoodDetailScreen extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("error",e.getMessage());
         }
-        AppCompatButton order_btn = findViewById(R.id.order_btn);
-        order_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (model.isInCart()){
-                    model.cart_count++;
-                    //gotocart(model);
-                    model.setInCart(true);
-                    Toast.makeText(FoodDetailScreen.this, "Item Add to Cart", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(FoodDetailScreen.this, "Item Already in Cart", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        AppCompatButton order_btn = findViewById(R.id.order_btn);
+//        order_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (model.isInCart()){
+//                    model.cart_count++;
+//                    //gotocart(model);
+//                    model.setInCart(true);
+//                    Toast.makeText(FoodDetailScreen.this, "Item Add to Cart", Toast.LENGTH_SHORT).show();
+//                }else {
+//                    Toast.makeText(FoodDetailScreen.this, "Item Already in Cart", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
     }
 //    @Override

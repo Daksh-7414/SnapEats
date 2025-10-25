@@ -1,19 +1,26 @@
 package com.example.snapeats.fragements;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.example.snapeats.bottomsheets.FoodDetailBottomSheet;
+import com.example.snapeats.interfaces.OnCategoryActionListener;
 import com.example.snapeats.managers.CartManager;
 import com.example.snapeats.managers.WishlistManager;
 import com.example.snapeats.models.CategoriesModel;
@@ -28,6 +35,8 @@ import com.example.snapeats.adapters.RecommendedFoodAdapter;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
 import com.example.snapeats.models.FoodItemModel;
 import com.example.snapeats.utils.NetworkUtils;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDragHandleView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -40,6 +49,8 @@ public class HomeScreenFragment extends Fragment {
     private CategoryAdapter categoryAdapter;
     private PopularFoodAdapter popularFoodAdapter;
     private RecommendedFoodAdapter recommendedFoodAdapter;
+
+
 
     private FoodRepository foodRepository;
     public HomeScreenFragment() {
@@ -76,7 +87,18 @@ public class HomeScreenFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.categoriesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
 
-        categoryAdapter = new CategoryAdapter(getContext());
+        categoryAdapter = new CategoryAdapter(getContext(), new OnCategoryActionListener() {
+            @Override
+            public void onCategoryClick(CategoriesModel model) {
+//                Intent intent = new Intent(getContext(), ViewCategoryActivity.class);
+//                startActivity(intent);
+                Gson gson = new Gson();
+                String json = gson.toJson(model);
+                Intent intent = new Intent(getContext(), ViewCategoryActivity.class);
+                intent.putExtra("CategoryModel", json);
+                startActivity(intent);
+            }
+        });
         recyclerView.setAdapter(categoryAdapter);
 
         TextView viewCategory = view.findViewById(R.id.viewCategory);
@@ -123,12 +145,10 @@ public class HomeScreenFragment extends Fragment {
 
             @Override
             public void onFoodItemClick(FoodItemModel model) {
-                Gson gson = new Gson();
-                String json = gson.toJson(model);
-                Intent intent = new Intent(getContext(), FoodDetailScreen.class);
-                intent.putExtra("foodModel", json);
-                startActivity(intent);
+                FoodDetailBottomSheet bottomSheet = FoodDetailBottomSheet.newInstance(model);
+                bottomSheet.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), "FoodDetailBottomSheet");
             }
+
         });
         popularFoodRecycle.setAdapter(popularFoodAdapter);
 
@@ -161,19 +181,44 @@ public class HomeScreenFragment extends Fragment {
 
             @Override
             public void onFoodItemClick(FoodItemModel model) {
-                Gson gson = new Gson();
-                String json = gson.toJson(model);
-                Intent intent = new Intent(getContext(), FoodDetailScreen.class);
-                intent.putExtra("foodModel", json);
-                startActivity(intent);
+                FoodDetailBottomSheet bottomSheet = FoodDetailBottomSheet.newInstance(model);
+                bottomSheet.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), "FoodDetailBottomSheet");
             }
 
         });
         recycler_recommended_food.setAdapter(recommendedFoodAdapter);
 
+        fetchCategories();
         FetchHomeData();
 
         return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchCategories();
+    }
+
+    private void fetchCategories(){
+        foodRepository.fetchCategories(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                ArrayList<CategoriesModel> categories = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    CategoriesModel category = child.getValue(CategoriesModel.class);
+                    if (category != null) {
+                        categories.add(category);
+                    }
+                }
+                // Now update adapter
+                categoryAdapter.updateData(categories);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getContext(), "Failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void FetchHomeData() {
@@ -188,26 +233,7 @@ public class HomeScreenFragment extends Fragment {
             return;
         }
         //Fetch Category from Firebase
-        foodRepository.fetchCategories(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                ArrayList<CategoriesModel> categories = new ArrayList<>();
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    CategoriesModel category = child.getValue(CategoriesModel.class);
-                    if (category != null) {
-                        categories.add(category);
-                    }
-                }
 
-                // Now update adapter
-                categoryAdapter.updateData(categories);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Toast.makeText(getContext(), "Failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
 
         //Fetch Popular Foods from Firebase
         foodRepository.fetchPopularFoods(new ValueEventListener() {

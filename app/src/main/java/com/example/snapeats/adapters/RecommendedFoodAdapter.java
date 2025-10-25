@@ -36,7 +36,7 @@ public class RecommendedFoodAdapter extends RecyclerView.Adapter<RecommendedFood
     @NonNull
     @Override
     public RecommendedFoodAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recommended_food_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.horizontal_food_card,parent,false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -51,21 +51,6 @@ public class RecommendedFoodAdapter extends RecyclerView.Adapter<RecommendedFood
         holder.food_name.setText(model.food_name);
         holder.food_restaurant.setText(model.food_restaurant_name);
         holder.price.setText("₹"+model.price);
-
-//        holder.food_name.post(() -> {
-//            int lineCount = holder.food_name.getLineCount();
-//
-//            if (lineCount > 1) {
-//                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 19);
-//                holder.food_name.requestLayout();
-//                holder.food_name.invalidate();
-//            } else {
-//                holder.food_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-//                holder.food_name.requestLayout();
-//                holder.food_name.invalidate();
-//            }
-//        });
-
 
         if (model.isInWishlist()) {
             holder.like_btn.setImageResource(R.drawable.favorite);

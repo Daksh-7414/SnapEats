@@ -31,7 +31,7 @@ public class SnapEatsApplication extends Application {
                 Boolean connected = snapshot.getValue(Boolean.class);
                 if (connected != null && connected) {
                     isFirebaseConnected = true;
-                    Log.d("SnapEatsApp", "Firebase Connected");
+                    Log.d("SnapEatsApp", " Firebase Connected");
                 } else {
                     isFirebaseConnected = false;
                     Log.d("SnapEatsApp", "Firebase Disconnected");
