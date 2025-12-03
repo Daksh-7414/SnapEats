@@ -35,7 +35,7 @@
     <color name="colorIconInactive">#818181</color> <!-- Use in: Bottom nav inactive state -->
 
     <!-- ⚙️ Neutral Border -->
-    <color name="colorBorderNeutral">#D3D3D3</color> <!-- Use in: Quantity buttons border, list item separators -->
+    <color name="colorBorderNeutral">#BBBBBB</color> <!-- Use in: Quantity buttons border, list item separators -->
 
     <!-- 🤍 White Text -->
     <color name="colorOnPrimary">#FFFFFF</color> <!-- Use in: Text on green buttons or green topbar -->
@@ -45,5 +45,10 @@
 
     <!-- 🩶 Arrow Icons (for profile screen) -->
     <color name="colorArrowIcon">#CCCCCC</color>
+    
+    <color name="offercard_color_1">#FAD174</color>
+    <color name="offercard_color_2">#FEE7E9</color>
+    <color name="offercard_color_3">#FEF1B1</color>
+    <color name="offercard_color_4">#D3F3FF</color>
 
 </resources>

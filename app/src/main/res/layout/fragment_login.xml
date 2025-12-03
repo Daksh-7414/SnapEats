@@ -3,176 +3,204 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:backgroundTint="@color/colorSurface"
-    tools:context=".fragements.LoginFragment">
+    tools:context=".auth.LoginFragment">
 
-
-
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="24dp"
+        android:paddingEnd="24dp"
+        android:paddingStart="24dp"
+        android:paddingBottom="10dp"
+        android:gravity="center_horizontal"
+        android:background="@color/colorSurface">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/signup"
+            android:layout_marginTop="27dp"/>
+        <!-- Welcome Back Title -->
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="24dp"
-            android:gravity="center_horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/signup"/>
-            <!-- Welcome Back Title -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Welcome back!"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:layout_marginBottom="8dp" />
+            android:layout_height="wrap_content"
+            android:text="Welcome back!"
+            android:textSize="27sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginBottom="8dp" />
 
-            <!-- Subtitle -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sign in to continue ordering"
-                android:textSize="19sp"
-                android:gravity="center"
-                android:textColor="@color/colorTextSecondary"
-                android:layout_marginBottom="40dp" />
+        <!-- Subtitle -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign in to continue ordering"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textStyle="normal"
+            android:textColor="@color/colorTextSecondary"
+            android:layout_marginBottom="15dp"/>
 
-            <EditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundMode="outline"
+            app:hintTextColor="@color/colorPrimary"
+            app:boxStrokeColor="@color/colorPrimary"
+            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidthFocused="3dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/card_background"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:hint="Enter your email"
-                android:textSize="14sp"
+                android:layout_height="match_parent"
+                android:hint="Email address"
+                android:textSize="17sp"
                 android:inputType="textEmailAddress"
-                android:layout_marginBottom="20dp" />
+                android:layout_marginBottom="15dp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="password_toggle"
+            app:boxBackgroundMode="outline"
+            app:hintTextColor="@color/colorPrimary"
+            app:boxStrokeColor="@color/colorPrimary"
+            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidthFocused="3dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/edittext_background"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:hint="Enter your password"
-                android:textSize="14sp"
+                android:layout_height="match_parent"
+                android:hint="Password"
+                android:textSize="17sp"
                 android:inputType="textPassword"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="18dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Forgot Password -->
+        <!-- Forgot Password -->
+        <TextView
+            android:id="@+id/tvForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password?"
+            android:textSize="14sp"
+            android:textColor="@color/colorTextSecondary"
+            android:layout_gravity="end"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Sign In Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Sign In"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:background="@drawable/button_background"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:layout_marginBottom="30dp" />
+
+        <!-- Or continue with -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorSurface">
+
+            <View
+                android:layout_width="108dp"
+                android:layout_height="1dp"
+                android:layout_centerVertical="true"
+                android:background="@color/colorTextSecondary"
+                android:layout_alignParentStart="@+id/textView4"/>
+
             <TextView
-                android:id="@+id/tvForgotPassword"
+                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Forgot Password?"
-                android:textSize="14sp"
+                android:layout_centerInParent="true"
+                android:backgroundTint="@color/colorSurface"
+                android:paddingStart="19dp"
+                android:paddingEnd="16dp"
+                android:text="Or continue with"
                 android:textColor="@color/colorTextSecondary"
-                android:layout_gravity="end"
-                android:layout_marginBottom="30dp"
-                android:clickable="true"
-                android:focusable="true" />
+                android:textSize="14sp" />
 
-            <!-- Sign In Button -->
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSignIn"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="Sign In"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textAllCaps="false"
-                android:background="@drawable/button_background"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:layout_marginBottom="30dp" />
+            <View
+                android:layout_width="120dp"
+                android:layout_height="1dp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/textView4"
+                android:background="@color/colorTextSecondary" />
 
-            <!-- Or continue with -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/colorSurface">
-
-                <View
-                    android:layout_width="120dp"
-                    android:layout_height="1dp"
-                    android:layout_centerVertical="true"
-                    android:background="@color/colorTextSecondary"
-                    android:layout_alignParentStart="@+id/textView4"/>
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:backgroundTint="@color/colorSurface"
-                    android:paddingStart="17dp"
-                    android:paddingEnd="16dp"
-                    android:text="Or continue with"
-                    android:textColor="@color/colorTextSecondary"
-                    android:textSize="14sp" />
-
-                <View
-                    android:layout_width="120dp"
-                    android:layout_height="1dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/textView4"
-                    android:background="@color/colorTextSecondary" />
-
-            </RelativeLayout>
-
-            <!-- Social Login Buttons -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginBottom="30dp">
-
-                <!-- Add your social login buttons here (Google, Facebook, etc.) -->
-                <!-- Example:
-                <ImageButton
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/social_button_bg"
-                    android:src="@drawable/ic_google"
-                    android:layout_margin="8dp" />
-                -->
-
-            </LinearLayout>
-
-            <!-- Create Account -->
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/tvCreateAccount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Create Account"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:backgroundTint="@color/colorAccent"
-                android:background="@drawable/button_background"
-                android:textColor="@color/colorTextPrimary"
-                android:textAllCaps="false"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <!-- Terms and Privacy -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="By continuing, you agree to our Terms of Service and \n Privacy Policy"
-                android:textSize="12sp"
-                android:layout_marginTop="6dp"
-                android:gravity="center"
-                android:textColor="@color/colorTextSecondary"
-                android:lineSpacingExtra="4sp"/>
-
-
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="19dp"
+            android:gravity="center">
+            <ImageButton
+                android:id="@+id/btngoogle"
+                android:layout_width="39dp"
+                android:layout_height="39dp"
+                android:backgroundTint="@color/colorDivider"
+                android:background="@drawable/card_background"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/google_icon" />
+            <ImageButton
+                android:layout_width="39dp"
+                android:layout_height="39dp"
+                android:backgroundTint="@color/colorDivider"
+                android:background="@drawable/card_background"
+                android:src="@drawable/facebook_icon"/>
         </LinearLayout>
+
+
+
+        <!-- Create Account -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tvCreateAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Account"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/colorAccent"
+            android:background="@drawable/button_background"
+            android:textColor="@color/colorTextPrimary"
+            android:textAllCaps="false"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Terms and Privacy -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/signup_terms"
+            android:textSize="13sp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:textColor="@color/colorTextSecondary"/>
+
+    </LinearLayout>
 
 </FrameLayout>

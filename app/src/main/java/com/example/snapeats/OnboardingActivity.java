@@ -11,6 +11,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.snapeats.adapters.OnboardingAdapter;
+import com.example.snapeats.auth.AuthActivity;
 import com.example.snapeats.models.OnboardingItem;
 import com.example.snapeats.ui.MainActivity;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
@@ -34,37 +35,38 @@ public class OnboardingActivity extends AppCompatActivity {
 
         viewPager2 = findViewById(R.id.onboardingViewPager);
         nextBtn = findViewById(R.id.nextBtn);
+        startOnboarding();
 
+
+    }
+
+    private void startOnboarding(){
         setupOnboardingItems();
-
         adapter = new OnboardingAdapter(onboardingItems);
         viewPager2.setAdapter(adapter);
 
         WormDotsIndicator dotsIndicator = findViewById(R.id.dotsIndicator);
         dotsIndicator.attachTo(viewPager2);
 
+        // Next Button Click
         nextBtn.setOnClickListener(v -> {
             if (viewPager2.getCurrentItem() + 1 < adapter.getItemCount()) {
                 viewPager2.setCurrentItem(viewPager2.getCurrentItem() + 1);
             } else {
-                // ✅ Last Screen → Go to Login/Signup
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, AuthActivity.class));
                 finish();
             }
         });
+        // Skip Button Click
         skip_btn = findViewById(R.id.skip_text);
-
-// Skip Button Click
         skip_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // yaha "OnboardingActivity.this" use karo
-                Intent intent = new Intent(OnboardingActivity.this, MainActivity.class);
+                Intent intent = new Intent(OnboardingActivity.this, AuthActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
-
     }
 
     private void setupOnboardingItems() {

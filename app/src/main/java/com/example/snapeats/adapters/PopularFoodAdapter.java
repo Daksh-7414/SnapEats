@@ -26,6 +26,7 @@ public class PopularFoodAdapter extends RecyclerView.Adapter<PopularFoodAdapter.
     Context context;
     ArrayList<FoodItemModel> popular_food_list;
     OnFoodItemActionListener listener;
+    public boolean showAll = false;
 
     public PopularFoodAdapter(Context context, OnFoodItemActionListener listener) {
         this.context = context;
@@ -83,12 +84,19 @@ public class PopularFoodAdapter extends RecyclerView.Adapter<PopularFoodAdapter.
 
     @Override
     public int getItemCount() {
-        return popular_food_list.size();
+        return showAll ? popular_food_list.size() : Math.min(popular_food_list.size(), 4);
     }
+
 
     public void updateData(ArrayList<FoodItemModel> popularFoods) {
         this.popular_food_list.clear();
         this.popular_food_list.addAll(popularFoods);
+        notifyDataSetChanged();
+    }
+
+    // Add this one method
+    public void toggleShowAll() {
+        showAll = !showAll;
         notifyDataSetChanged();
     }
 

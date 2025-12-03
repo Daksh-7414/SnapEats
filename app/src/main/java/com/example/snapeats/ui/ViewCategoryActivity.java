@@ -2,6 +2,7 @@ package com.example.snapeats.ui;
 
 import static java.security.AccessController.getContext;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.snapeats.R;
+import com.example.snapeats.adapters.BottomAdapter;
 import com.example.snapeats.adapters.CategoryAdapter;
 import com.example.snapeats.adapters.PopularFoodAdapter;
 import com.example.snapeats.bottomsheets.FoodDetailBottomSheet;
@@ -39,12 +41,12 @@ import java.util.ArrayList;
 
 public class ViewCategoryActivity extends AppCompatActivity{
 
-    private PopularFoodAdapter popularFoodAdapter;
+    private BottomAdapter bottomAdapter;
     FoodRepository foodRepository;
     CategoryAdapter categoryAdapter;
     RecyclerView popularFoodRecycle;
 
-    public ArrayList<FoodItemModel> popularFoods = new ArrayList<>();
+    private ArrayList<FoodItemModel> popularFoods = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,15 +55,17 @@ public class ViewCategoryActivity extends AppCompatActivity{
 
         foodRepository = new FoodRepository();
 
-        popularFoodRecycle = findViewById(R.id.popular_food_list);
+        // Fetch Data from Firebase
+
+        popularFoodRecycle = findViewById(R.id.category_food_list);
         popularFoodRecycle.setLayoutManager(new GridLayoutManager(ViewCategoryActivity.this, 2));
-        popularFoodAdapter = new PopularFoodAdapter(getApplicationContext(), new OnFoodItemActionListener() {
+        bottomAdapter = new BottomAdapter(getApplicationContext(), new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(FoodItemModel model) {
-                if (!model.isInCart()){
+                if (!model.isInCart()) {
                     CartManager.getInstance().addToCart(model);
                     Toast.makeText(getApplicationContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Toast.makeText(getApplicationContext(), "Item Already in Cart", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -73,18 +77,21 @@ public class ViewCategoryActivity extends AppCompatActivity{
                 } else {
                     WishlistManager.getInstance().addWishlist(model);
                 }
-                popularFoodAdapter.notifyItemChanged(position, "wishlist");
+                bottomAdapter.notifyItemChanged(position);
+
             }
 
             @Override
             public void onFoodItemClick(FoodItemModel model) {
                 FoodDetailBottomSheet bottomSheet = FoodDetailBottomSheet.newInstance(model);
+                bottomSheet.setOnFoodUpdatedListener(() -> {
+                    bottomAdapter.notifyDataSetChanged();
+                });
+
                 bottomSheet.show(getSupportFragmentManager(), "FoodDetailBottomSheet");
             }
-
-
         });
-        popularFoodRecycle.setAdapter(popularFoodAdapter);
+        popularFoodRecycle.setAdapter(bottomAdapter);
 
         // RecyclerView for Categories
         RecyclerView recyclerView = findViewById(R.id.categoriesRecyclerView);
@@ -97,9 +104,7 @@ public class ViewCategoryActivity extends AppCompatActivity{
         });
         recyclerView.setAdapter(categoryAdapter);
 
-        // Fetch Data from Firebase
         FetchAll();
-
 
 
     }
@@ -138,12 +143,14 @@ public class ViewCategoryActivity extends AppCompatActivity{
         foodRepository.fetchAllFoods(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                ArrayList<FoodItemModel> popularFoods = new ArrayList<>();
+
+                popularFoods.clear();
+                //ArrayList<FoodItemModel> popularFoods = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
                     FoodItemModel food = child.getValue(FoodItemModel.class);
                     if (food != null) popularFoods.add(food);
                 }
-                popularFoodAdapter.updateData(popularFoods);
+                bottomAdapter.updateData(popularFoods);
                 String json = getIntent().getStringExtra("CategoryModel");
                 if (json != null) {
                     Gson gson = new Gson();
@@ -167,6 +174,6 @@ public class ViewCategoryActivity extends AppCompatActivity{
 
             }
         }
-        popularFoodAdapter.updateData(filterList);
+        bottomAdapter.updateData(filterList);
     }
 }

@@ -13,7 +13,20 @@
           "package_name": "com.example.snapeats"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "167280992660-3uq3l3scqkriqmmh52l6dfrk34uuljtl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.snapeats",
+            "certificate_hash": "f7ba177b30fe78d0b08ab657077c5ccb1b4fd2b1"
+          }
+        },
+        {
+          "client_id": "167280992660-jb80caij0qememvhcj4t6t921vn85s77.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBq3-6Jwrla3PIbdrA75bxlSQiGWvmobts"
@@ -21,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "167280992660-jb80caij0qememvhcj4t6t921vn85s77.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

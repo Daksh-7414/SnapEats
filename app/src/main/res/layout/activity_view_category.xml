@@ -30,7 +30,7 @@
 
         <!-- Right side products fragment -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/popular_food_list"
+            android:id="@+id/category_food_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"

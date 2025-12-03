@@ -1,9 +1,6 @@
 package com.example.snapeats.models;
 
-
-import java.io.Serializable;
-
-public class FoodItemModel implements Serializable {
+public class FoodItemModel {
     private String id;
     public String food_image;
     public String food_name;

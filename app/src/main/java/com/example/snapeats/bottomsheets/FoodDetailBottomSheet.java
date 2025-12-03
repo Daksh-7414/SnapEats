@@ -1,6 +1,7 @@
 package com.example.snapeats.bottomsheets;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
+import com.example.snapeats.interfaces.OnFoodUpdatedListener;
 import com.example.snapeats.managers.CartManager;
 import com.example.snapeats.managers.WishlistManager;
 import com.example.snapeats.models.FoodItemModel;
@@ -27,15 +29,11 @@ public class FoodDetailBottomSheet extends BottomSheetDialogFragment {
 
     private static final String ARG_FOOD_ITEM = "food_item";
     private FoodItemModel model;
+    private OnFoodUpdatedListener listener;
 
     public static FoodDetailBottomSheet newInstance(FoodItemModel foodItem) {
         FoodDetailBottomSheet fragment = new FoodDetailBottomSheet();
-        Bundle args = new Bundle();
-
-        Gson gson = new Gson();
-        args.putString(ARG_FOOD_ITEM, gson.toJson(foodItem));
-
-        fragment.setArguments(args);
+        fragment.model = foodItem;
         return fragment;
     }
 
@@ -46,14 +44,21 @@ public class FoodDetailBottomSheet extends BottomSheetDialogFragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_food_detailed_screen, container, false);
 
-        if (getArguments() != null) {
-            String json = getArguments().getString(ARG_FOOD_ITEM);
-            model = new Gson().fromJson(json, FoodItemModel.class);
-        }
-
         bindViews(view);
 
         return view;
+    }
+
+    public void setOnFoodUpdatedListener(OnFoodUpdatedListener listener){
+        this.listener = listener;
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if(listener != null){
+            listener.onFoodUpdated();
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -110,6 +115,7 @@ public class FoodDetailBottomSheet extends BottomSheetDialogFragment {
                 WishlistManager.getInstance().addWishlist(model);
                 wishlistButton.setImageResource(R.drawable.favorite);
             }
+
         });
     }
 }

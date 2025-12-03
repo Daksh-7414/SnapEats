@@ -180,7 +180,7 @@ public class WishlistScreenFragment extends Fragment {
 
                         wishlist_food_adapter.updateData(wishlistfoods);
                     }
-                },800);
+                },300);
 
 
             }
