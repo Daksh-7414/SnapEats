@@ -1,18 +1,11 @@
 package com.example.snapeats.fragements;
 
-//import static com.example.snapeats.fragements.cart_screen.gotocart;
-//import static com.example.snapeats.repository.FoodRepository.cartFoods;
-//import static com.example.snapeats.repository.FoodRepository.wishlistFoods;
-
-import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +13,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.snapeats.bottomsheets.FoodDetailBottomSheet;
 import com.example.snapeats.managers.CartManager;
 import com.example.snapeats.managers.WishlistManager;
 import com.example.snapeats.repository.FoodRepository;
-import com.example.snapeats.ui.FoodDetailScreen;
 import com.example.snapeats.R;
 import com.example.snapeats.adapters.WishlistFoodAdapter;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
@@ -34,8 +25,6 @@ import com.example.snapeats.utils.NetworkUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.Collections;
 

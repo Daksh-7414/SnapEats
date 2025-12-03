@@ -2,13 +2,10 @@ package com.example.snapeats.ui;
 
 import android.os.Bundle;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.snapeats.R;
-import com.example.snapeats.adapters.PopularFoodAdapter;
 import com.example.snapeats.adapters.RecommendedFoodAdapter;
 import com.example.snapeats.bottomsheets.FoodDetailBottomSheet;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
@@ -17,7 +14,6 @@ import com.example.snapeats.managers.WishlistManager;
 import com.example.snapeats.models.FoodItemModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 

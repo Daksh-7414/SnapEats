@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.snapeats.OnboardingActivity;
 import com.example.snapeats.R;
-import com.example.snapeats.auth.AuthActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

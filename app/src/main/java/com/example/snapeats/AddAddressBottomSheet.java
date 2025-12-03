@@ -9,13 +9,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import com.example.snapeats.bottomsheets.FoodDetailBottomSheet;
 import com.example.snapeats.models.AddressModel;
-import com.example.snapeats.models.FoodItemModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.radiobutton.MaterialRadioButton;

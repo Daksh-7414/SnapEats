@@ -3,22 +3,16 @@ package com.example.snapeats.fragements;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-import com.example.snapeats.EditProfileFragment;
 import com.example.snapeats.LogoutBottomSheet;
-import com.example.snapeats.PaymentProfile;
-import com.example.snapeats.ProfileAddressFragment;
 import com.example.snapeats.ProfileManager;
 import com.example.snapeats.R;
 import com.google.firebase.auth.FirebaseAuth;

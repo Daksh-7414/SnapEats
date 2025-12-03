@@ -1,9 +1,7 @@
 package com.example.snapeats.fragements;
 
 import static com.example.snapeats.ProfileManager.getcurrentuser;
-
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
@@ -34,11 +31,8 @@ import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.request.target.Target;
 import com.example.snapeats.NotificationActivity;
 import com.example.snapeats.SearchScreen;
-import com.example.snapeats.SnapEatsApplication;
 import com.example.snapeats.adapters.OfferAdapter;
 import com.example.snapeats.bottomsheets.FoodDetailBottomSheet;
 import com.example.snapeats.interfaces.OnCategoryActionListener;
@@ -47,7 +41,6 @@ import com.example.snapeats.managers.WishlistManager;
 import com.example.snapeats.models.CategoriesModel;
 import com.example.snapeats.models.OfferModel;
 import com.example.snapeats.repository.FoodRepository;
-import com.example.snapeats.ui.FoodDetailScreen;
 import com.example.snapeats.R;
 import com.example.snapeats.ui.ViewCategoryActivity;
 import com.example.snapeats.ui.ViewPopularActivity;
@@ -57,17 +50,10 @@ import com.example.snapeats.adapters.RecommendedFoodAdapter;
 import com.example.snapeats.interfaces.OnFoodItemActionListener;
 import com.example.snapeats.models.FoodItemModel;
 import com.example.snapeats.utils.NetworkUtils;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDragHandleView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-
-import java.io.File;
 import java.util.ArrayList;
 
 public class HomeScreenFragment extends Fragment {

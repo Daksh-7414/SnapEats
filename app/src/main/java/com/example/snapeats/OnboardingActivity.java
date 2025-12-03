@@ -5,17 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.viewpager2.widget.ViewPager2;
-
 import com.example.snapeats.adapters.OnboardingAdapter;
 import com.example.snapeats.auth.AuthActivity;
 import com.example.snapeats.models.OnboardingItem;
-import com.example.snapeats.ui.MainActivity;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
-
 import java.util.ArrayList;
 import java.util.List;
 

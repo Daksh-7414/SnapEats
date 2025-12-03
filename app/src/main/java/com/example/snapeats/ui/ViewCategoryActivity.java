@@ -1,27 +1,16 @@
 package com.example.snapeats.ui;
 
-import static java.security.AccessController.getContext;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.snapeats.R;
 import com.example.snapeats.adapters.BottomAdapter;
 import com.example.snapeats.adapters.CategoryAdapter;
-import com.example.snapeats.adapters.PopularFoodAdapter;
 import com.example.snapeats.bottomsheets.FoodDetailBottomSheet;
 import com.example.snapeats.fragements.NoInternetScreen;
 import com.example.snapeats.interfaces.OnCategoryActionListener;
@@ -36,7 +25,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 
 public class ViewCategoryActivity extends AppCompatActivity{

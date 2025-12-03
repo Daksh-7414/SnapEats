@@ -6,14 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
-
 import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
 import com.example.snapeats.interfaces.OnFoodUpdatedListener;
@@ -21,8 +18,6 @@ import com.example.snapeats.managers.CartManager;
 import com.example.snapeats.managers.WishlistManager;
 import com.example.snapeats.models.FoodItemModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.gson.Gson;
-
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class FoodDetailBottomSheet extends BottomSheetDialogFragment {
