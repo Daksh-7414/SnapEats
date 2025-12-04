@@ -106,7 +106,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="15dp"
             android:hint="Full Name"
-            android:inputType="textEmailAddress"
+            android:inputType="textPersonName"
             android:textSize="17sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +135,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="15dp"
             android:hint="Phone Number"
-            android:inputType="textEmailAddress"
+            android:inputType="number"
             android:textSize="17sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -165,7 +165,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="15dp"
             android:hint="House or Flat number"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             android:textSize="17sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -195,7 +195,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="15dp"
             android:hint="Street or Area"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             android:textSize="17sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -231,7 +231,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="15dp"
                 android:hint="City"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:textSize="17sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -256,7 +256,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="15dp"
                 android:hint="State"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:textSize="17sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -287,7 +287,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="15dp"
             android:hint="Pin Code"
-            android:inputType="textEmailAddress"
+            android:inputType="number"
             android:textSize="17sp" />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -59,7 +59,7 @@
             android:layout_height="48dp"
             android:layout_below="@+id/specialOfferText"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="28dp"
             android:layout_marginTop="2dp"
             android:backgroundTint="@color/colorError"
             app:cornerRadius="30dp"
@@ -69,13 +69,13 @@
 
         <ImageView
             android:id="@+id/offerfoodImage"
-            android:layout_width="199dp"
+            android:layout_width="200dp"
             android:layout_height="189dp"
             android:layout_marginEnd="4dp"
 
             
 
-            android:src="@drawable/special_image_2"
+            android:src="@drawable/special_image_4"
 
             android:layout_alignParentEnd="true"
             app:layout_constraintBottom_toBottomOf="parent"

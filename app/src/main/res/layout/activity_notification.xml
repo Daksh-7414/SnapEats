@@ -8,7 +8,7 @@
     android:background="@color/colorSurface"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    tools:context=".NotificationActivity">
+    tools:context=".ui.activities.NotificationActivity">
 
     <ImageView
         android:id="@+id/imageView2"

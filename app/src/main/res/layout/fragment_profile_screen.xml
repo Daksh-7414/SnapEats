@@ -4,14 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragements.ProfileScreenFragment">
+    tools:context=".ui.fragements.ProfileScreenFragment"
+    android:background="@color/colorSurface">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/ProfileLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:fillViewport="true"
-        android:background="@color/colorSurface">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -201,6 +203,7 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <LinearLayout
+                        android:id="@+id/orderhistory"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:paddingStart="9dp"
@@ -313,4 +316,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:id="@+id/loader"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:indeterminateTint="@color/colorPrimary"
+        />
 </FrameLayout>

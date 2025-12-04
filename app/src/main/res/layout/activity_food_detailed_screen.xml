@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.FoodDetailScreen">
+    tools:context=".ui.detail.FoodDetailScreen">
 
 <!--        <com.google.android.material.bottomsheet.BottomSheetDragHandleView-->
 <!--            android:id="@+id/bottomSheetDragHandleView"-->
@@ -49,6 +49,7 @@
         android:padding="8dp"
         android:scaleType="centerCrop"
         android:src="@drawable/share_icon"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/food_image"
         app:layout_constraintEnd_toEndOf="parent" />
 

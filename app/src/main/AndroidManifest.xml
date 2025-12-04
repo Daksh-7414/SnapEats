@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".SnapEatsApplication"
+        android:name=".utils.SnapEatsApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -20,31 +20,34 @@
         android:theme="@style/Theme.SnapEats"
         tools:targetApi="31">
         <activity
-            android:name=".SearchScreen"
+            android:name=".ui.profile.OrderHistory"
             android:exported="false" />
         <activity
-            android:name=".NotificationActivity"
+            android:name=".ui.activities.SearchScreen"
             android:exported="false" />
         <activity
-            android:name=".ProfileManager"
+            android:name=".ui.activities.NotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".auth.AuthActivity"
+            android:name=".data.managers.ProfileManager"
             android:exported="false" />
         <activity
-            android:name=".OnboardingActivity"
+            android:name=".ui.auth.AuthActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.FoodDetailScreen"
+            android:name=".ui.activities.OnboardingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.ViewPopularActivity"
+            android:name=".ui.detail.FoodDetailScreen"
             android:exported="false" />
         <activity
-            android:name=".ui.ViewCategoryActivity"
+            android:name=".ui.detail.ViewPopularActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.SplashScreen"
+            android:name=".ui.detail.ViewCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,7 +56,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:exported="false" />
     </application>
 
