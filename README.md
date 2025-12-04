@@ -107,83 +107,6 @@ SnapEats is a feature-rich food delivery application designed with **modern UI/U
 | Image Loading   | Glide                                     |
 | Version Control | Git & GitHub                              |
 
-## 📂 Project Structure
-
-```
-com.example.snapeats/
-│
-├── managers/
-│   ├── CartManager
-│   └── WishlistManager
-│
-├── models/
-│   ├── AddressModel
-│   ├── CategoriesModel
-│   ├── FoodItemModel
-│   ├── OfferModel
-│   ├── OnboardingItem
-│   └── UsersModel
-│
-├── repository/
-│   └── FoodRepository
-│
-├── ui/
-│   ├── FoodDetailScreen
-│   ├── MainActivity
-│   ├── SplashScreen
-│   ├── ViewCategoryActivity
-│   └── ViewPopularActivity
-│
-├── utils/
-│   ├── NetworkUtils
-│   ├── AddAddressBottomSheet
-│   ├── CloudinaryConfig
-│   ├── EditProfileFragment
-│   ├── LogoutBottomSheet
-│   ├── NotificationActivity
-│   ├── OnboardingActivity
-│   ├── OrderHistory
-│   ├── PaymentProfile
-│   ├── ProfileAddressFragment
-│   ├── ProfileManager
-│   ├── SearchScreen
-│   └── SnapEatsApplication
-│
-├── adapters/
-│   ├── AddressAdapter
-│   ├── BottomAdapter
-│   ├── CategoryAdapter
-│   ├── FoodCartAdapter
-│   ├── OfferAdapter
-│   ├── OnboardingAdapter
-│   ├── PopularFoodAdapter
-│   ├── RecommendedFoodAdapter
-│   └── WishlistFoodAdapter
-│
-├── auth/
-│   ├── AuthActivity
-│   ├── LoginFragment
-│   └── SignupFragment
-│
-├── bottomsheets/
-│   └── FoodDetailBottomSheet
-│
-├── firebase/
-│   └── FireBaseConnection
-│
-├── fragments/
-│   ├── CartScreenFragment
-│   ├── HomeScreenFragment
-│   ├── NoInternetScreen
-│   ├── ProfileScreenFragment
-│   └── WishlistScreenFragment
-│
-└── interfaces/
-    ├── OnCartActionListener
-    ├── OnCategoryActionListener
-    ├── OnFoodItemActionListener
-    └── OnFoodUpdatedListener
-```
 
 ---
 
@@ -204,7 +127,7 @@ UI inspired by Blinkit, Swiggy & Zomato.
 ### 1️⃣ Clone
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/SnapEats.git
+git clone https://github.com/Daksh-7414/SnapEats.git
 ```
 
 ### 2️⃣ Open in Android Studio
