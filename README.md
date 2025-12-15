@@ -182,7 +182,7 @@ Build and run on emulator or device.
 
 ## 👨‍💻 Developer
 
-**Daksh Singh**
-Android Developer | Java | Firebase | UI/UX
+**Daksh Singh**  
+Android Developer | Java | Firebase | UI/UX  
 
 ---
