@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/colorSurface"
-    tools:context=".CheckOut">
+    tools:context=".ui.profile.CheckOut">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

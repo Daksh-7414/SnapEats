@@ -108,19 +108,5 @@ public class FoodItemModel {
     }
 
 
-    //    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj) return true;
-//        if (!(obj instanceof Food_Item_Model)) return false;
-//        Food_Item_Model other = (Food_Item_Model) obj;
-//        return food_name.equals(other.food_name) &&
-//                food_restaurant_name.equals(other.food_restaurant_name) &&
-//                price.equals(other.price);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(food_name, food_restaurant_name, price);
-//    }
 
 }

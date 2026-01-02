@@ -1,26 +1,17 @@
 package com.example.snapeats.ui.activities;
 
-
-
-import android.app.ComponentCaller;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.example.snapeats.R;
-import com.example.snapeats.ui.fragements.NoInternetScreen;
 import com.example.snapeats.ui.fragements.CartScreenFragment;
 import com.example.snapeats.ui.fragements.HomeScreenFragment;
 import com.example.snapeats.ui.fragements.ProfileScreenFragment;
 import com.example.snapeats.ui.fragements.WishlistScreenFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.FirebaseApp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,9 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseApp.initializeApp(this);
 
-        // Setup navigation first (so UI is ready even if data loads later)
         BottomNavigationView bnView = findViewById(R.id.bnView);
         if (bnView == null) {
             Log.e("MainActivity", "BottomNavigationView not found - check XML");
@@ -80,10 +69,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showNoInternetScreen() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, new NoInternetScreen())
-                .commit();
-    }
 }

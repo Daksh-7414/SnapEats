@@ -33,15 +33,11 @@ public class WishlistManager {
     }
     public void addWishlist(FoodItemModel food) {
 
-        // 🔥 UI ke liye turant add
         wishlistIds.add(food.getId());
-
         foodRepository.updateUserWishlistFood(food, true);
     }
 
     public void removeWishlist(FoodItemModel food) {
-
-        // 🔥 UI ke liye turant remove
         wishlistIds.remove(food.getId());
 
         foodRepository.updateUserWishlistFood(food, false);

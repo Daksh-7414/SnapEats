@@ -69,7 +69,7 @@ public class ViewCategoryActivity extends AppCompatActivity{
 
         popularFoodRecycle = findViewById(R.id.category_food_list);
         popularFoodRecycle.setLayoutManager(new GridLayoutManager(ViewCategoryActivity.this, 2));
-        bottomAdapter = new BottomAdapter(getApplicationContext(), new OnFoodItemActionListener() {
+        bottomAdapter = new BottomAdapter(this, new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(FoodItemModel model) {
                 if (!CartManager.getInstance().isInCart(model.getId())) {

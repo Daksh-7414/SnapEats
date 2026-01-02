@@ -51,7 +51,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         holder.category_name.setText(categories_model.getCategoryName());
 
-        // ✅ Highlight selected item
+        //  Highlight selected item
         if (position == selectedPosition) {
             holder.categoryBack.setCardBackgroundColor(context.getColor(R.color.coloraddicon));
         } else {

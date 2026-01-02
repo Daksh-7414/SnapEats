@@ -129,7 +129,7 @@ public class AuthActivity extends AppCompatActivity {
         }
     }
 
-    // Called from fragment: ((AuthActivity)getActivity()).startGoogleSignIn();
+
     public void startGoogleSignIn() {
         if (mGoogleSignInClient == null) {
             Toast.makeText(this, "GoogleSignIn not initialized", Toast.LENGTH_SHORT).show();
@@ -177,7 +177,7 @@ public class AuthActivity extends AppCompatActivity {
                             editor.putString("userName", user.getDisplayName());
                             editor.apply();
 
-                            // ✅ यहाँ Realtime Database में save करो
+
                             saveUserToRealtimeDatabase(user);
                         }
 
@@ -205,7 +205,7 @@ public class AuthActivity extends AppCompatActivity {
                 .child("Users");
         String userId = user.getUid();
 
-        // User data map बनाओ
+
         Map<String, Object> userData = new HashMap<>();
         userData.put("emailAdd", user.getEmail());
         userData.put("userName", user.getDisplayName());
@@ -214,7 +214,7 @@ public class AuthActivity extends AppCompatActivity {
         userData.put("phoneNo", "");
         userData.put("image", "");
 
-        // Realtime Database में save करो
+
         ref.child(userId).setValue(userData)
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "User data saved to Realtime Database");
@@ -280,7 +280,7 @@ public class AuthActivity extends AppCompatActivity {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
-        editor.apply(); // apply() better hai commit() se
+        editor.apply();
 
         FirebaseAuth.getInstance().signOut();
     }

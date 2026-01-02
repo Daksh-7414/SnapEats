@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.snapeats.CheckOut;
+import com.example.snapeats.ui.profile.CheckOut;
 import com.example.snapeats.R;
 import com.example.snapeats.ui.adapters.FoodCartAdapter;
 import com.example.snapeats.data.interfaces.OnCartActionListener;

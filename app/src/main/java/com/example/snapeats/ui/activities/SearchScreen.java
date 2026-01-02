@@ -136,13 +136,11 @@ public class SearchScreen extends AppCompatActivity {
 
     private void parseFoodList(String json) {
         try {
-            Log.d(TAG, "Parsing JSON...");
             Gson gson = new Gson();
             Type type = new TypeToken<ArrayList<FoodItemModel>>(){}.getType();
             allFoodList = gson.fromJson(json, type);
 
             if (allFoodList == null) {
-                Log.e(TAG, "Gson returned null list");
                 allFoodList = new ArrayList<>();
             }
 
@@ -202,13 +200,11 @@ public class SearchScreen extends AppCompatActivity {
             for (FoodItemModel food : allFoodList) {
                 boolean matches = false;
 
-                // Check food name (case insensitive)
                 if (food.getFood_name() != null &&
                         food.getFood_name().toLowerCase().contains(searchText)) {
                     matches = true;
                     Log.d(TAG, "Found in name: " + food.getFood_name());
                 }
-                // Also check category if you want even broader search
                 else if (food.getFood_restaurant_name() != null &&
                         food.getFood_restaurant_name().toLowerCase().contains(searchText)) {
                     matches = true;
@@ -223,14 +219,13 @@ public class SearchScreen extends AppCompatActivity {
             Log.d(TAG, "Found " + newFilteredList.size() + " matching items");
         }
 
-        // Update the filtered list
         filteredFoodList.clear();
         filteredFoodList.addAll(newFilteredList);
 
-        // Update adapter with new data
+
         searchAdapter.updateData(filteredFoodList);
 
-        // Update UI state based on results
+
         updateUIState();
 
         logCurrentState("After filterList");
@@ -238,15 +233,15 @@ public class SearchScreen extends AppCompatActivity {
 
     private void updateUIState() {
         if (filteredFoodList.isEmpty()) {
-            // Show "Not Found" layout, hide RecyclerView
+
             searchRecyclerView.setVisibility(View.GONE);
             searchLayout.setVisibility(View.VISIBLE);
-            Log.d(TAG, "No results found, showing 'Not Found' layout");
+
         } else {
-            // Show RecyclerView, hide "Not Found" layout
+
             searchRecyclerView.setVisibility(View.VISIBLE);
             searchLayout.setVisibility(View.GONE);
-            Log.d(TAG, "Found results, showing RecyclerView");
+
         }
     }
 

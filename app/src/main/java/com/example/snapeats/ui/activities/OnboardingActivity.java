@@ -25,7 +25,6 @@ public class OnboardingActivity extends AppCompatActivity {
     private OnboardingAdapter adapter;
     private List<OnboardingItem> onboardingItems;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

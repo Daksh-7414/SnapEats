@@ -1,10 +1,7 @@
-package com.example.snapeats;
+package com.example.snapeats.ui.profile;
 
 import static com.example.snapeats.data.managers.ProfileManager.getcurrentuser;
 
-import static java.security.AccessController.getContext;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,14 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.snapeats.R;
 import com.example.snapeats.data.managers.CartManager;
 import com.example.snapeats.data.managers.ProfileManager;
 import com.example.snapeats.data.models.AddressModel;
-import com.example.snapeats.data.models.CategoriesModel;
 import com.example.snapeats.data.models.FoodItemModel;
 import com.example.snapeats.ui.adapters.CheckoutAddressAdapter;
 import com.example.snapeats.ui.bottomsheets.AddAddressBottomSheet;
@@ -29,7 +25,6 @@ import com.example.snapeats.utils.SnapEatsApplication;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.radiobutton.MaterialRadioButton;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

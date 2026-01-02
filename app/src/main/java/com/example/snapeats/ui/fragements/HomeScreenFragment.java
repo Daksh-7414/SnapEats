@@ -68,12 +68,8 @@ public class HomeScreenFragment extends Fragment {
     private ArrayList<FoodItemModel> popularFoods;
     private ArrayList<FoodItemModel> AllFoods;
 
-    private RelativeLayout specialCard;
     ImageButton notification;
     private LinearLayout searchHome;
-
-    ArrayList<String> wishlistIds = new ArrayList<>();
-
 
 
     private FoodRepository foodRepository;
@@ -89,7 +85,6 @@ public class HomeScreenFragment extends Fragment {
         CartManager.getInstance().startCartListener();
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -136,15 +131,13 @@ public class HomeScreenFragment extends Fragment {
         offers.add(new OfferModel(R.drawable.special_image_2, "Special Offers", "Pizza Party Deal\nBuy 1 Get 1 Free\nToday Only"));
         offers.add(new OfferModel(R.drawable.special_image_3, "Special Offers", "Sweet Donut Treat\nBuy 2 Get 1 Free\nToday Only"));
         offers.add(new OfferModel(R.drawable.special_image_4, "Special Offers", "Combo Meal Offer\nFlat 20% Discount\nToday Only"));
+        // Adapter set
 
-// ✅ Adapter set
         OfferAdapter adapter = new OfferAdapter(offers);
         viewPager.setAdapter(adapter);
-
-// 🕒 Auto-slide setup
+        // Auto-slide setup
         viewPager.setCurrentItem(adapter.getItemCount() / 2, false);
-
-// 🕒 Auto-slide setup with smooth infinite loop
+        // Auto-slide setup with smooth infinite loop
         Handler sliderHandler = new Handler(Looper.getMainLooper());
 
         Runnable sliderRunnable = new Runnable() {
@@ -158,11 +151,9 @@ public class HomeScreenFragment extends Fragment {
                 sliderHandler.postDelayed(this, 4000);
             }
         };
-
-// Start auto-slide
+        // Start auto-slide
         sliderHandler.postDelayed(sliderRunnable, 4000);
-
-// 🔄 Reset timer when user swipes manually
+        //  Reset timer when user swipes manually
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -172,7 +163,7 @@ public class HomeScreenFragment extends Fragment {
             }
         });
 
-// 🌀 Carousel visual effect
+        //  Carousel visual effect
         viewPager.setClipToPadding(false);
         viewPager.setClipChildren(false);
         viewPager.setOffscreenPageLimit(3);
@@ -189,7 +180,7 @@ public class HomeScreenFragment extends Fragment {
         });
         viewPager.setPageTransformer(transformer);
 
-// 🧹 Prevent memory leak when fragment view destroyed
+        //  Prevent memory leak when fragment view destroyed
         getViewLifecycleOwner().getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
             if (event == Lifecycle.Event.ON_DESTROY) {
                 sliderHandler.removeCallbacks(sliderRunnable);
@@ -336,7 +327,7 @@ public class HomeScreenFragment extends Fragment {
     public void onResume() {
         super.onResume();
         fetchCategories();
-//
+
         if (popularFoodAdapter != null) {
             popularFoodAdapter.notifyDataSetChanged();
         }
@@ -435,11 +426,7 @@ public class HomeScreenFragment extends Fragment {
         });
     }
 
-    // Existing code ke saath bas yeh method update karo:
 
-    /**
-     * Profile image load karta hai Cloudinary URL se
-     */
     private void loadProfileImage() {
         if (getcurrentuser() == null || !isAdded() || getContext() == null) {
             if (homeProfile != null) {
@@ -450,7 +437,7 @@ public class HomeScreenFragment extends Fragment {
         if (getcurrentuser() != null) {
             textView7.setText("Hi "+ getcurrentuser().getDisplayName());
             Uri photoUri = getcurrentuser().getPhotoUrl();
-            Log.d("rul", String.valueOf(photoUri));
+            Log.d("url", String.valueOf(photoUri));
             if (photoUri != null) {
                 Glide.with(this)
                         .load(photoUri)
@@ -459,36 +446,5 @@ public class HomeScreenFragment extends Fragment {
             }
         }
     }
-//    public void syncWishlistWithFoods(ArrayList<FoodItemModel> foods) {
-//
-//        String uid = getcurrentuser().getUid();
-//
-//        SnapEatsApplication.getFirebaseDatabase()
-//                .getReference("Users")
-//                .child(uid)
-//                .child("wishlist")
-//                .addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//                        ArrayList<String> wishlistIds = new ArrayList<>();
-//                        for (DataSnapshot snap : snapshot.getChildren()) {
-//                            wishlistIds.add(snap.getKey()); // foodId
-//                        }
-//
-//                        // 🔥 update model boolean
-//                        for (FoodItemModel food : foods) {
-//                            food.setInWishlist(wishlistIds.contains(food.getId()));
-//                        }
-//
-//                        // adapters refresh
-//                        popularFoodAdapter.notifyDataSetChanged();
-//                        recommendedFoodAdapter.notifyDataSetChanged();
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {}
-//                });
-//    }
 
 }

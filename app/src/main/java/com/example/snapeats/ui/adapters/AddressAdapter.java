@@ -50,8 +50,6 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
             @Override
             public void onClick(View v) {
                 listener.onDeleteClick(address,position);
-//                addressList.remove(position);
-//                notifyItemRemoved(position);
 
             }
         });

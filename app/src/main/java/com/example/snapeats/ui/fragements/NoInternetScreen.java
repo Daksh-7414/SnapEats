@@ -12,8 +12,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.snapeats.R;
-import com.example.snapeats.data.firebase.FireBaseConnection;
+
 import com.example.snapeats.utils.NetworkUtils;
+import com.example.snapeats.utils.SnapEatsApplication;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,15 +36,6 @@ public class NoInternetScreen extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NoInternetScreen.
-     */
-    // TODO: Rename and change types and number of parameters
     public static NoInternetScreen newInstance(String param1, String param2) {
         NoInternetScreen fragment = new NoInternetScreen();
         Bundle args = new Bundle();
@@ -77,38 +69,39 @@ public class NoInternetScreen extends Fragment {
     }
 
     private void handleRetry() {
-        if (NetworkUtils.isInternetAvailable(getContext())) {
-            Toast.makeText(getContext(), "Network available, retrying...", Toast.LENGTH_SHORT).show();
 
-            FireBaseConnection.checkFirebaseConnection(new FireBaseConnection.FirebaseConnectionListener() {
-                @Override
-                public void onConnected() {
-                    if (getActivity() != null) {
-                        FragmentManager fm = getActivity().getSupportFragmentManager();
-
-                        // Pichle fragment ko stack se nikaal aur reload kar
-                        fm.popBackStack();  // NoInternetFragment hata dega
-
-                        // Ab top par wahi fragment rahega jo pehle tha (Home/Cart/Profile etc.)
-                        Fragment currentFragment = fm.findFragmentById(R.id.container);
-
-                        if (currentFragment != null) {
-                            fm.beginTransaction()
-                                    .detach(currentFragment)
-                                    .attach(currentFragment)
-                                    .commit();
-                        }
-                    }
-                }
-
-                @Override
-                public void onDisconnected() {
-                    Toast.makeText(getContext(), "Still no connection to Firebase", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
+        // 1️⃣ Internet check
+        if (!NetworkUtils.isInternetAvailable(getContext())) {
             Toast.makeText(getContext(), "No internet connection. Please try again later.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
+        Toast.makeText(getContext(), "Network available, retrying...", Toast.LENGTH_SHORT).show();
+
+        // 2️⃣ Firebase check (CORRECT condition)
+        if (!SnapEatsApplication.isFirebaseConnected()) {
+            Toast.makeText(getContext(), "Connecting to Firebase...", Toast.LENGTH_SHORT).show();
+            return; // wait for firebase listener
+        }
+
+        // 3️⃣ Internet + Firebase OK → restore UI
+        if (getActivity() == null) return;
+
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+
+        // NoInternetFragment remove
+        fm.popBackStack();
+
+        // Reload previous fragment
+        Fragment currentFragment =
+                fm.findFragmentById(R.id.container);
+
+        if (currentFragment != null) {
+            fm.beginTransaction()
+                    .detach(currentFragment)
+                    .attach(currentFragment)
+                    .commitAllowingStateLoss();
+        }
     }
+
 }

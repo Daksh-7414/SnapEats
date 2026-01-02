@@ -19,9 +19,9 @@ public class CloudinaryConfig {
      */
     public Map getConfig() {
         Map config = new HashMap();
-        config.put("cloud_name", CLOUD_NAME);   // Cloud name set karo
-        config.put("api_key", API_KEY);         // API key set karo
-        config.put("api_secret", API_SECRET);   // API secret set karo
+        config.put("cloud_name", CLOUD_NAME);
+        config.put("api_key", API_KEY);
+        config.put("api_secret", API_SECRET);
         return config;
     }
 }

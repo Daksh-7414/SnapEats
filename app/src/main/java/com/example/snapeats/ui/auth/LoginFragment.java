@@ -88,9 +88,7 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    /**
-     * Initializes all UI components from the layout
-     */
+
     private void initializeViews(View view) {
         etEmail = view.findViewById(R.id.etEmail);
         etPassword = view.findViewById(R.id.etPassword);
@@ -100,9 +98,7 @@ public class LoginFragment extends Fragment {
         facebookbtn = view.findViewById(R.id.facebookbtn);
     }
 
-    /**
-     * Sets up all click listeners for the fragment
-     */
+
     private void setupClickListeners() {
         // Sign in button click listener
         btnSignIn.setOnClickListener(new View.OnClickListener() {
@@ -145,10 +141,7 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    /**
-     * Handles user login with email and password
-     * Performs validation and authenticates user with Firebase
-     */
+
     private void signInUser() {
         // Get input values and trim whitespace
         String email = etEmail.getText().toString().trim();
@@ -182,10 +175,7 @@ public class LoginFragment extends Fragment {
                 });
     }
 
-    /**
-     * Validates user input fields
-     * Returns true if all validations pass, false otherwise
-     */
+
     private boolean validateInputs(String email, String password) {
         // Email validation
         if (email.isEmpty()) {
@@ -211,10 +201,7 @@ public class LoginFragment extends Fragment {
         return true;
     }
 
-    /**
-     * Handles successful user login
-     * Notifies parent activity about authentication success
-     */
+
     private void handleSignInSuccess(@NonNull Task<AuthResult> task) {
         Log.d(TAG, "signInWithEmail:success");
         FirebaseUser user = authActivity.GetAuthObj().getCurrentUser();
@@ -231,10 +218,7 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    /**
-     * Extracts display name from FirebaseUser
-     * Returns email username part if display name is not available
-     */
+
     private String getDisplayName(FirebaseUser user) {
 
         if (user.getDisplayName() != null && !user.getDisplayName().isEmpty()) {
@@ -247,10 +231,7 @@ public class LoginFragment extends Fragment {
         return "User";
     }
 
-    /**
-     * Handles login failure
-     * Displays appropriate error message to user
-     */
+
     private void handleSignInFailure(@NonNull Task<AuthResult> task) {
         Log.w(TAG, "signInWithEmail:failure", task.getException());
         String errorMessage = "Login failed. Please try again.";

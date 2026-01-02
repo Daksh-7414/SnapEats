@@ -1,7 +1,5 @@
 package com.example.snapeats.data.managers;
 
-
-
 import android.util.Log;
 import android.widget.TextView;
 
@@ -24,10 +22,6 @@ public class CartManager {
     FoodRepository foodRepository;
     private static final HashSet<String> cartIds = new HashSet<>();
     private DatabaseReference cartRef;
-
-//    static final int deliveryfeevalue = 15;
-//    static final int platformfeevalue = 5;
-//    TextView pricesummary, deliveryfee, platformfee, totalprice, finalprice;
 
     public CartManager() {
         foodRepository = new FoodRepository();
@@ -73,9 +67,9 @@ public class CartManager {
 
         cartRef.removeValue()
                 .addOnSuccessListener(aVoid ->
-                        Log.d("Cart", "🗑 Cart cleared"))
+                        Log.d("Cart", "Cart cleared"))
                 .addOnFailureListener(e ->
-                        Log.e("Cart", "❌ Cart clear failed", e));
+                        Log.e("Cart", "Cart clear failed", e));
     }
 
 
@@ -83,11 +77,8 @@ public class CartManager {
         return cartIds.contains(foodId);
     }
 
-    // Add item to cart
     public void addToCart(FoodItemModel food) {
-        //food.setInCart(true);
         cartIds.add(food.getId());
-        //food.setCart_count(food.getCart_count() + 1);
         foodRepository.updateUserCartFood(food, 1);
     }
     public void cartIncrement(FoodItemModel food){
@@ -99,19 +90,16 @@ public class CartManager {
         foodRepository.updateUserCartFood(food, food.getCart_count());
     }
     public void cartRemove(FoodItemModel food){
-        //food.setCart_count(0);
-        //food.setInCart(false);
+
         foodRepository.updateUserCartFood(food, 0);
     }
     public int calculateTotalPrice(ArrayList<FoodItemModel> list){
         int total = 0;
-
         for (FoodItemModel item : list) {
             int itemPrice = item.getPrice(); // maan lo model me getPrice() hai
             int quantity = item.getCart_count();
             total += itemPrice * quantity;
         }
-
         return total;
     }
 

@@ -10,7 +10,6 @@ public class UsersModel {
     private String gender;
     private String phoneNo;
     private String loaction;
-    private Map<String, AddressModel> addresses;
 
 
     public UsersModel() {

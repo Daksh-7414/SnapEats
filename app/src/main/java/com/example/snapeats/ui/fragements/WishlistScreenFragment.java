@@ -41,7 +41,6 @@ public class WishlistScreenFragment extends Fragment {
 
     WishlistFoodAdapter wishlist_food_adapter;
     private FoodRepository foodRepository;
-    private WishlistManager wishlistManager;
 
     NestedScrollView wishlistlayout;
     LinearLayout emptyWishlistLayout;
@@ -77,7 +76,6 @@ public class WishlistScreenFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         foodRepository = new FoodRepository();
-        wishlistManager = new WishlistManager();
     }
 
     @Override

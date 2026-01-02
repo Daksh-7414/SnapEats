@@ -3,6 +3,7 @@ package com.example.snapeats.utils;
 import android.app.Application;
 import android.util.Log;
 import com.cloudinary.android.MediaManager;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,15 +21,20 @@ public class SnapEatsApplication extends Application {
 
         CloudinaryConfig config = new CloudinaryConfig();
         MediaManager.init(this, config.getConfig());
-
+        FirebaseApp.initializeApp(this);
 
         Log.d("SnapeatsApplication", "Application started");
 
         // Firebase initialize
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.setPersistenceEnabled(true);
+        if (firebaseDatabase == null) {
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            firebaseDatabase.setPersistenceEnabled(true);
+        }
 
-        // Setup global connection listener
+        setupFirebaseConnectionListener();
+    }
+
+    private void setupFirebaseConnectionListener(){
         connectedRef = firebaseDatabase.getReference(".info/connected");
         connectedRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -51,13 +57,10 @@ public class SnapEatsApplication extends Application {
         });
     }
 
-    // Global getter for Firebase instance
     public static FirebaseDatabase getFirebaseDatabase() {
         return firebaseDatabase;
     }
 
-
-    // Global getter for connection status
     public static boolean isFirebaseConnected() {
         return isFirebaseConnected;
     }
