@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.detail.FoodDetailScreen">
+    tools:context=".ui.bottomsheets.LogoutBottomSheet">
 
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
         android:id="@+id/bottomSheetDragHandleView"

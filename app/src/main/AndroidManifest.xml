@@ -5,8 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
 
     <application
         android:name=".utils.SnapEatsApplication"
@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SnapEats"
         tools:targetApi="31">
+        <activity
+            android:name=".CheckOut"
+            android:exported="false" />
         <activity
             android:name=".ui.profile.OrderHistory"
             android:exported="false" />
@@ -36,9 +39,6 @@
             android:exported="false" />
         <activity
             android:name=".ui.activities.OnboardingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.detail.FoodDetailScreen"
             android:exported="false" />
         <activity
             android:name=".ui.detail.ViewPopularActivity"

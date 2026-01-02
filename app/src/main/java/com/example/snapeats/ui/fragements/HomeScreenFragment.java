@@ -50,6 +50,7 @@ import com.example.snapeats.ui.adapters.RecommendedFoodAdapter;
 import com.example.snapeats.data.interfaces.OnFoodItemActionListener;
 import com.example.snapeats.data.models.FoodItemModel;
 import com.example.snapeats.utils.NetworkUtils;
+import com.example.snapeats.utils.SnapEatsApplication;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -63,11 +64,16 @@ public class HomeScreenFragment extends Fragment {
     private RecommendedFoodAdapter recommendedFoodAdapter;
     ImageView homeProfile;
     TextView textView7;
+
     private ArrayList<FoodItemModel> popularFoods;
     private ArrayList<FoodItemModel> AllFoods;
+
     private RelativeLayout specialCard;
     ImageButton notification;
     private LinearLayout searchHome;
+
+    ArrayList<String> wishlistIds = new ArrayList<>();
+
 
 
     private FoodRepository foodRepository;
@@ -79,6 +85,8 @@ public class HomeScreenFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         foodRepository = new FoodRepository();
+        WishlistManager.getInstance().startWishlistListener();
+        CartManager.getInstance().startCartListener();
     }
 
     @SuppressLint("SetTextI18n")
@@ -118,6 +126,7 @@ public class HomeScreenFragment extends Fragment {
         textView7 = view.findViewById(R.id.textView7);
         homeProfile = view.findViewById(R.id.homeProfile);
         loadProfileImage();
+
 
 
         ViewPager2 viewPager = view.findViewById(R.id.discountCard);
@@ -234,10 +243,10 @@ public class HomeScreenFragment extends Fragment {
         TextView viewPopular = view.findViewById(R.id.viewPopularfood);
         viewPopular.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), ViewPopularActivity.class);
-            //startActivity(intent);
+
             Gson gson = new Gson();
             String json = gson.toJson(popularFoods);
-            //Intent intent = new Intent(getContext(), ViewCategoryActivity.class);
+
             intent.putExtra("PopularFoods", json);
             startActivity(intent);
         });
@@ -248,7 +257,7 @@ public class HomeScreenFragment extends Fragment {
         popularFoodAdapter = new PopularFoodAdapter(getContext(), new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(FoodItemModel model) {
-                if (!model.isInCart()){
+                if (!CartManager.getInstance().isInCart(model.getId())) {
                     CartManager.getInstance().addToCart(model);
                     Toast.makeText(view.getContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
                 }else {
@@ -258,17 +267,21 @@ public class HomeScreenFragment extends Fragment {
 
             @Override
             public void onToggleWishlist(FoodItemModel model, int position) {
-                if (model.isInWishlist()) {
+                if (WishlistManager.getInstance().isInWishlist(model.getId())) {
                     WishlistManager.getInstance().removeWishlist(model);
                 } else {
                     WishlistManager.getInstance().addWishlist(model);
                 }
-                popularFoodAdapter.notifyItemChanged(position, "wishlist");
+                popularFoodAdapter.notifyItemChanged(position);
             }
 
             @Override
             public void onFoodItemClick(FoodItemModel model) {
                 FoodDetailBottomSheet bottomSheet = FoodDetailBottomSheet.newInstance(model);
+                bottomSheet.setOnFoodUpdatedListener(() -> {
+                    popularFoodAdapter.notifyDataSetChanged();
+                });
+
                 bottomSheet.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), "FoodDetailBottomSheet");
             }
 
@@ -284,7 +297,7 @@ public class HomeScreenFragment extends Fragment {
         recommendedFoodAdapter = new RecommendedFoodAdapter(getContext(), new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(FoodItemModel model) {
-                if (!model.isInCart()){
+                if (!CartManager.getInstance().isInCart(model.getId())) {
                     CartManager.getInstance().addToCart(model);
                     Toast.makeText(view.getContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
                 }else {
@@ -294,7 +307,7 @@ public class HomeScreenFragment extends Fragment {
 
             @Override
             public void onToggleWishlist(FoodItemModel model, int position) {
-                if (model.isInWishlist()) {
+                if (WishlistManager.getInstance().isInWishlist(model.getId())) {
                     WishlistManager.getInstance().removeWishlist(model);
                 } else {
                     WishlistManager.getInstance().addWishlist(model);
@@ -305,6 +318,9 @@ public class HomeScreenFragment extends Fragment {
             @Override
             public void onFoodItemClick(FoodItemModel model) {
                 FoodDetailBottomSheet bottomSheet = FoodDetailBottomSheet.newInstance(model);
+                bottomSheet.setOnFoodUpdatedListener(() -> {
+                    recommendedFoodAdapter.notifyDataSetChanged();
+                });
                 bottomSheet.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), "FoodDetailBottomSheet");
             }
 
@@ -320,6 +336,14 @@ public class HomeScreenFragment extends Fragment {
     public void onResume() {
         super.onResume();
         fetchCategories();
+//
+        if (popularFoodAdapter != null) {
+            popularFoodAdapter.notifyDataSetChanged();
+        }
+
+        if (recommendedFoodAdapter != null) {
+            recommendedFoodAdapter.notifyDataSetChanged();
+        }
     }
 
     private void fetchCategories(){
@@ -355,9 +379,6 @@ public class HomeScreenFragment extends Fragment {
             }
             return;
         }
-        //Fetch Category from Firebase
-
-//        public ArrayList<FoodItemModel> popularFoods ;
 
         foodRepository.fetchAllFoods(new ValueEventListener() {
             @Override
@@ -367,6 +388,7 @@ public class HomeScreenFragment extends Fragment {
                     FoodItemModel food = child.getValue(FoodItemModel.class);
                     if (food != null) AllFoods.add(food);
                 }
+                //syncWishlistWithFoods(AllFoods);
             }
 
             @Override
@@ -384,6 +406,7 @@ public class HomeScreenFragment extends Fragment {
                     FoodItemModel food = child.getValue(FoodItemModel.class);
                     if (food != null) popularFoods.add(food);
                 }
+                //syncWishlistWithFoods(popularFoods); // 🔥 FIX
                 popularFoodAdapter.updateData(popularFoods);
             }
 
@@ -401,6 +424,7 @@ public class HomeScreenFragment extends Fragment {
                     FoodItemModel food = child.getValue(FoodItemModel.class);
                     if (food != null) recommendedFoods.add(food);
                 }
+                //syncWishlistWithFoods(recommendedFoods); // 🔥 FIX
                 recommendedFoodAdapter.updateData(recommendedFoods);
             }
 
@@ -435,4 +459,36 @@ public class HomeScreenFragment extends Fragment {
             }
         }
     }
+//    public void syncWishlistWithFoods(ArrayList<FoodItemModel> foods) {
+//
+//        String uid = getcurrentuser().getUid();
+//
+//        SnapEatsApplication.getFirebaseDatabase()
+//                .getReference("Users")
+//                .child(uid)
+//                .child("wishlist")
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//
+//                        ArrayList<String> wishlistIds = new ArrayList<>();
+//                        for (DataSnapshot snap : snapshot.getChildren()) {
+//                            wishlistIds.add(snap.getKey()); // foodId
+//                        }
+//
+//                        // 🔥 update model boolean
+//                        for (FoodItemModel food : foods) {
+//                            food.setInWishlist(wishlistIds.contains(food.getId()));
+//                        }
+//
+//                        // adapters refresh
+//                        popularFoodAdapter.notifyDataSetChanged();
+//                        recommendedFoodAdapter.notifyDataSetChanged();
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {}
+//                });
+//    }
+
 }

@@ -2,6 +2,9 @@ package com.example.snapeats.data.repository;
 
 import android.util.Log;
 
+import com.example.snapeats.data.managers.ProfileManager;
+import com.example.snapeats.data.models.FoodItemModel;
+import com.example.snapeats.utils.SnapEatsApplication;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,100 +42,238 @@ public class FoodRepository {
     // ✅ Fetch recommended foods
     public void fetchRecommendedFoods(ValueEventListener listener) {
         foodRef.orderByChild("isRecommended").equalTo(true)
-                .addValueEventListener(listener);
+                .addListenerForSingleValueEvent(listener);
     }
 
     // ✅ Fetch wishlist foods
     public void fetchWishlistFoods(ValueEventListener listener) {
-        foodRef.orderByChild("isInWishlist").equalTo(true)
-                .addValueEventListener(listener);
+        String uid = ProfileManager.getcurrentuser().getUid();
+
+        DatabaseReference wishlistRef =
+                SnapEatsApplication.getFirebaseDatabase()
+                        .getReference("Users")
+                        .child(uid)
+                        .child("wishlist");
+
+        wishlistRef.addValueEventListener(listener);
     }
 
     // ✅ Fetch cart foods
     public void fetchCartFoods(ValueEventListener listener) {
-//        DatabaseReference foodRefe = FirebaseDatabase.getInstance().getReference("foods");
-        foodRef.orderByChild("isInCart").equalTo(true)
-                .addValueEventListener(listener);
+        String uid = ProfileManager.getcurrentuser().getUid();
+
+        DatabaseReference cartRef =
+                SnapEatsApplication.getFirebaseDatabase()
+                        .getReference("Users")
+                        .child(uid)
+                        .child("cart");
+
+        cartRef.addValueEventListener(listener);
     }
+
+    public void fetchOrderedFoods(ValueEventListener listener) {
+
+        String uid = ProfileManager.getcurrentuser().getUid();
+
+        DatabaseReference ordersRef =
+                SnapEatsApplication.getFirebaseDatabase()
+                        .getReference("Users")
+                        .child(uid)
+                        .child("orders");
+
+        ordersRef.addValueEventListener(listener);
+    }
+
 
     //Update the cart list in firebase
-    public void updateCartFoodByItemId(String itemId, boolean inCart, int cartCount) {
-        foodRef.addListenerForSingleValueEvent(new ValueEventListener() {
-        @Override
-            public void onDataChange(DataSnapshot foodsSnap) {
-                boolean itemFound = false;
+//    public void updateCartFoodByItemId(String itemId, boolean inCart, int cartCount) {
+//        foodRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//        @Override
+//            public void onDataChange(DataSnapshot foodsSnap) {
+//                boolean itemFound = false;
+//
+//                for (DataSnapshot foodSnap : foodsSnap.getChildren()) { // e.g., food_01, food_02
+//                    String idValue = foodSnap.child("id").getValue(String.class);
+//
+//                    if (idValue != null && idValue.equals(itemId)) {
+//                        DatabaseReference itemRef = foodSnap.getRef();
+//
+//                        Map<String, Object> updates = new HashMap<>();
+//                        updates.put("isInCart", inCart);
+//                        updates.put("cart_count", cartCount);
+//
+//                        itemRef.updateChildren(updates)
+//                                .addOnSuccessListener(aVoid ->
+//                                        Log.d("CartUpdate", "✅ Updated: " + itemId + " in " + foodSnap.getKey()))
+//                                .addOnFailureListener(e ->
+//                                        Log.e("CartUpdate", "❌ Failed to update " + itemId, e));
+//
+//                        itemFound = true;
+//                        break;
+//                    }
+//                }
+//
+//                if (!itemFound) {
+//                    Log.w("CartUpdate", "⚠️ Item not found with id: " + itemId);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                Log.e("CartUpdate", "❌ Firebase error: " + error.getMessage());
+//            }
+//        });
+//    }
 
-                for (DataSnapshot foodSnap : foodsSnap.getChildren()) { // e.g., food_01, food_02
-                    String idValue = foodSnap.child("id").getValue(String.class);
+//    public void updateUserCartFood(FoodItemModel food, boolean inCart, int cartCount) {
+//        String uid = ProfileManager.getcurrentuser().getUid();
+//
+//        DatabaseReference cartItemRef = SnapEatsApplication.getFirebaseDatabase()
+//                .getReference("Users")
+//                .child(uid)
+//                .child("cart")
+//                .child(food.getId());
+//
+//        if (inCart) {
+//            // First, check if item already exists
+//            cartItemRef.get().addOnSuccessListener(snapshot -> {
+//                if (snapshot.exists()) {
+//                    // Item exists, update only cart_count and isInCart
+//                    Map<String, Object> updates = new HashMap<>();
+//                    updates.put("cart_count", cartCount);
+//                    updates.put("isInCart", true);
+//
+//                    cartItemRef.updateChildren(updates)
+//                            .addOnSuccessListener(aVoid ->
+//                                    Log.d("UserCart", "✅ Existing cart item updated: " + food.getId()))
+//                            .addOnFailureListener(e ->
+//                                    Log.e("UserCart", "❌ Failed to update cart item", e));
+//                } else {
+//                    // Item does not exist, store the entire FoodItemModel object
+//                    food.setCart_count(cartCount);
+//                    food.setInCart(true);
+//
+//                    cartItemRef.setValue(food)
+//                            .addOnSuccessListener(aVoid ->
+//                                    Log.d("UserCart", "✅ New cart item added: " + food.getId()))
+//                            .addOnFailureListener(e ->
+//                                    Log.e("UserCart", "❌ Failed to add cart item", e));
+//                }
+//            }).addOnFailureListener(e ->
+//                    Log.e("UserCart", "❌ Failed to fetch cart item", e));
+//        } else {
+//            // Remove from cart
+//            cartItemRef.removeValue()
+//                    .addOnSuccessListener(aVoid ->
+//                            Log.d("UserCart", "🗑 Removed from cart: " + food.getId()))
+//                    .addOnFailureListener(e ->
+//                            Log.e("UserCart", "❌ Failed to remove cart item", e));
+//        }
+//    }
 
-                    if (idValue != null && idValue.equals(itemId)) {
-                        DatabaseReference itemRef = foodSnap.getRef();
+    public void updateUserCartFood(FoodItemModel food, int cartCount) {
 
-                        Map<String, Object> updates = new HashMap<>();
-                        updates.put("isInCart", inCart);
-                        updates.put("cart_count", cartCount);
+        String uid = ProfileManager.getcurrentuser().getUid();
 
-                        itemRef.updateChildren(updates)
-                                .addOnSuccessListener(aVoid ->
-                                        Log.d("CartUpdate", "✅ Updated: " + itemId + " in " + foodSnap.getKey()))
-                                .addOnFailureListener(e ->
-                                        Log.e("CartUpdate", "❌ Failed to update " + itemId, e));
+        DatabaseReference cartItemRef = SnapEatsApplication.getFirebaseDatabase()
+                .getReference("Users")
+                .child(uid)
+                .child("cart")
+                .child(food.getId());
 
-                        itemFound = true;
-                        break;
-                    }
-                }
+        if (cartCount > 0) {
 
-                if (!itemFound) {
-                    Log.w("CartUpdate", "⚠️ Item not found with id: " + itemId);
-                }
-            }
+            // update model quantity
+            food.setCart_count(cartCount);
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.e("CartUpdate", "❌ Firebase error: " + error.getMessage());
-            }
-        });
+            // 🔥 FULL OBJECT STORE (merge by key)
+            cartItemRef.setValue(food)
+                    .addOnSuccessListener(aVoid ->
+                            Log.d("UserCart", "✅ Cart item saved/updated: " + food.getId()))
+                    .addOnFailureListener(e ->
+                            Log.e("UserCart", "❌ Failed to save cart item", e));
+
+        } else {
+            // 🔥 remove if quantity = 0
+            cartItemRef.removeValue()
+                    .addOnSuccessListener(aVoid ->
+                            Log.d("UserCart", "🗑 Removed from cart: " + food.getId()))
+                    .addOnFailureListener(e ->
+                            Log.e("UserCart", "❌ Failed to remove cart item", e));
+        }
     }
 
-    public void updateWishlistFoodByItemId(String itemId, boolean inWishlist){
-        foodRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot foodsSnap) {
-                boolean itemFound = false;
 
-                for (DataSnapshot foodSnap : foodsSnap.getChildren()) { // e.g., food_01, food_02
-                    String idValue = foodSnap.child("id").getValue(String.class);
 
-                    if (idValue != null && idValue.equals(itemId)) {
-                        DatabaseReference itemRef = foodSnap.getRef();
+    //    public void updateWishlistFoodByItemId(String itemId, boolean inWishlist){
+    //        foodRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    //            @Override
+    //            public void onDataChange(DataSnapshot foodsSnap) {
+    //                boolean itemFound = false;
+    //
+    //                for (DataSnapshot foodSnap : foodsSnap.getChildren()) { // e.g., food_01, food_02
+    //                    String idValue = foodSnap.child("id").getValue(String.class);
+    //
+    //                    if (idValue != null && idValue.equals(itemId)) {
+    //                        DatabaseReference itemRef = foodSnap.getRef();
+    //
+    //                        Map<String, Object> updates = new HashMap<>();
+    //                        updates.put("isInWishlist", inWishlist);
+    //
+    //                        itemRef.updateChildren(updates)
+    //                                .addOnSuccessListener(aVoid ->
+    //                                        Log.d("CartUpdate", "✅ Updated: " + itemId + " in " + foodSnap.getKey()))
+    //                                .addOnFailureListener(e ->
+    //                                        Log.e("CartUpdate", "❌ Failed to update " + itemId, e));
+    //
+    //                        itemFound = true;
+    //                        break;
+    //                    }
+    //                }
+    //
+    //                if (!itemFound) {
+    //                    Log.w("Wishlist update", "⚠️ Item not found with id: " + itemId);
+    //                }
+    //            }
+    //
+    //            @Override
+    //            public void onCancelled(DatabaseError error) {
+    //                Log.e("CartUpdate", "❌ Firebase error: " + error.getMessage());
+    //            }
+    //        });
+    //    }
 
-                        Map<String, Object> updates = new HashMap<>();
-                        updates.put("isInWishlist", inWishlist);
-                        //updates.put("cart_count", cartCount);
+    public void updateUserWishlistFood(FoodItemModel food, boolean addToWishlist) {
 
-                        itemRef.updateChildren(updates)
-                                .addOnSuccessListener(aVoid ->
-                                        Log.d("CartUpdate", "✅ Updated: " + itemId + " in " + foodSnap.getKey()))
-                                .addOnFailureListener(e ->
-                                        Log.e("CartUpdate", "❌ Failed to update " + itemId, e));
+        String uid = ProfileManager.getcurrentuser().getUid();
 
-                        itemFound = true;
-                        break;
-                    }
-                }
+        DatabaseReference wishlistRef = SnapEatsApplication.getFirebaseDatabase()
+                .getReference("Users")
+                .child(uid)
+                .child("wishlist")
+                .child(food.getId());
 
-                if (!itemFound) {
-                    Log.w("Wishlist update", "⚠️ Item not found with id: " + itemId);
-                }
-            }
+        if (addToWishlist) {
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.e("CartUpdate", "❌ Firebase error: " + error.getMessage());
-            }
-        });
+            // ✅ store FULL FOOD MODEL (NO BOOLEAN)
+            wishlistRef.setValue(food)
+                    .addOnSuccessListener(aVoid ->
+                            Log.d("UserWishlist", "❤️ Added to wishlist: " + food.getId()))
+                    .addOnFailureListener(e ->
+                            Log.e("UserWishlist", "❌ Failed to add wishlist", e));
+
+        } else {
+
+            // ✅ remove item
+            wishlistRef.removeValue()
+                    .addOnSuccessListener(aVoid ->
+                            Log.d("UserWishlist", "🗑 Removed from wishlist: " + food.getId()))
+                    .addOnFailureListener(e ->
+                            Log.e("UserWishlist", "❌ Failed to remove wishlist", e));
+        }
     }
+
+
 
 
 

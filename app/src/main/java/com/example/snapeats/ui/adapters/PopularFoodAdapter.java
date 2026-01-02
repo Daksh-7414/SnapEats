@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
 import com.example.snapeats.data.interfaces.OnFoodItemActionListener;
+import com.example.snapeats.data.managers.CartManager;
+import com.example.snapeats.data.managers.WishlistManager;
 import com.example.snapeats.data.models.FoodItemModel;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ public class PopularFoodAdapter extends RecyclerView.Adapter<PopularFoodAdapter.
     ArrayList<FoodItemModel> popular_food_list;
     OnFoodItemActionListener listener;
     public boolean showAll = false;
+
 
     public PopularFoodAdapter(Context context, OnFoodItemActionListener listener) {
         this.context = context;
@@ -48,17 +51,28 @@ public class PopularFoodAdapter extends RecyclerView.Adapter<PopularFoodAdapter.
         FoodItemModel model = popular_food_list.get(position);
         Glide.with(context)
                 .load(model.getFood_image())
+                .placeholder(R.drawable.no_image) // loading ke time
+                .error(R.drawable.no_image)
                 .into(holder.food_image);
         holder.food_name.setText(model.food_name);
         String ratingText = "⭐ " + String.valueOf(model.rating) + " (1.3k)";
         holder.rating.setText(ratingText);
         holder.price.setText("₹"+model.price);
 
-        if (model.isInWishlist()) {
+        if (WishlistManager.getInstance().isInWishlist(model.getId())) {
             holder.like_btn.setImageResource(R.drawable.favorite);
         } else {
             holder.like_btn.setImageResource(R.drawable.favorite_border);
         }
+
+        if (CartManager.getInstance().isInCart(model.getId())){
+            holder.addtocart.setImageResource(R.drawable.already_cart);
+        }else{
+            holder.addtocart.setImageResource(R.drawable.add_circle);
+            holder.addtocart.setClickable(true);
+            holder.addtocart.setEnabled(true);
+        }
+
 
         holder.like_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +85,9 @@ public class PopularFoodAdapter extends RecyclerView.Adapter<PopularFoodAdapter.
             @Override
             public void onClick(View v) {
                 listener.onAddToCart(model);
+                holder.addtocart.setImageResource(R.drawable.already_cart);
+                holder.addtocart.setClickable(false);
+                holder.addtocart.setEnabled(false);
             }
         });
 

@@ -49,12 +49,15 @@ public class FoodCartAdapter extends RecyclerView.Adapter<FoodCartAdapter.ViewHo
         FoodItemModel model = cart_food_list.get(position);
         Glide.with(context)
                 .load(model.getFood_image())
+                .placeholder(R.drawable.no_image) // loading ke time
+                .error(R.drawable.no_image)
                 .into(holder.food_image);
         holder.food_name.setText(model.food_name);
         holder.food_restaurant.setText(model.food_restaurant_name);
         holder.price.setText("₹"+model.price);
         holder.cart_count.setText(String.valueOf(model.cart_count));
-
+        String ratingText = "⭐ " + String.valueOf(model.rating) + " (1.3k)";
+        holder.rating.setText(ratingText);
 //        holder.price.setText("₹" + (Integer.parseInt(model.price.replace("₹","").trim()) * model.cart_count));
         holder.price.setText("₹" + (model.price * model.cart_count));
         holder.cart_add.setOnClickListener(v ->{
@@ -93,7 +96,7 @@ public class FoodCartAdapter extends RecyclerView.Adapter<FoodCartAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView food_image;
-        TextView food_name,food_restaurant,price,cart_count;
+        TextView food_name,food_restaurant,price,cart_count,rating;
         ImageButton cart_minus,cart_add;
         ConstraintLayout cart_layout;
 
@@ -104,6 +107,7 @@ public class FoodCartAdapter extends RecyclerView.Adapter<FoodCartAdapter.ViewHo
             food_restaurant = itemView.findViewById(R.id.food_restaurant_name);
             price = itemView.findViewById(R.id.cart_food_price);
             cart_count = itemView.findViewById(R.id.cart_count);
+            rating = itemView.findViewById(R.id.textView3);
             cart_minus = itemView.findViewById(R.id.cart_minus);
             cart_add = itemView.findViewById(R.id.cart_add);
             cart_layout = itemView.findViewById(R.id.cart_layout);

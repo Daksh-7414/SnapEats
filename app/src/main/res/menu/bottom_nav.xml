@@ -9,7 +9,7 @@
     <item
         android:id="@+id/nav_wishlist"
         android:icon="@drawable/wishlist_icon"
-        android:title="Like"/>
+        android:title="Wishlist"/>
     <item
         android:id="@+id/nav_cart"
         android:icon="@drawable/cart_icon"

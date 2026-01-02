@@ -10,10 +10,10 @@ public class FoodItemModel {
     public String category;
     public float rating;
     public int cart_count;
-    public boolean isInWishlist;
-    public boolean isInCart;
+
     public boolean isPopular;
     public boolean isRecommended;
+
 
     public FoodItemModel() {
     }
@@ -107,21 +107,6 @@ public class FoodItemModel {
         isRecommended = recommended;
     }
 
-    public boolean isInWishlist() {
-        return isInWishlist;
-    }
-
-    public void setInWishlist(boolean inWishlist) {
-        isInWishlist = inWishlist;
-    }
-
-    public boolean isInCart() {
-        return isInCart;
-    }
-
-    public void setInCart(boolean inCart) {
-        isInCart = inCart;
-    }
 
     //    @Override
 //    public boolean equals(Object obj) {

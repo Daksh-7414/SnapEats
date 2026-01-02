@@ -3,6 +3,7 @@ package com.example.snapeats.ui.profile;
 import static com.example.snapeats.data.managers.ProfileManager.getcurrentuser;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,12 +38,13 @@ import java.util.List;
 public class ProfileAddressFragment extends Fragment {
 
     AppCompatButton addbtn;
-    TextView locationType;
-    TextView completeAdd;
-    TextView PhoneNo;
     private RecyclerView addressesRecyclerView;
     private AddressAdapter addressAdapter;
     private List<AddressModel> addressList;
+
+    LinearLayout loaderLayout ;
+    LinearLayout savedAddressLayout ;
+    LinearLayout emptyAddressLayout ;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,6 +92,10 @@ public class ProfileAddressFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_address, container, false);
+        loaderLayout = view.findViewById(R.id.loaderLayout);
+         savedAddressLayout = view.findViewById(R.id.savedAddressLayout);
+         emptyAddressLayout = view.findViewById(R.id.emptyAddressLayout);
+
 
         ImageButton backArrow = view.findViewById(R.id.back_arrow);
         addressesRecyclerView = view.findViewById(R.id.addressesRecyclerView);
@@ -102,9 +109,6 @@ public class ProfileAddressFragment extends Fragment {
             sheet.show(getParentFragmentManager(), "address_sheet");
         });
 
-        locationType = view.findViewById(R.id.locationType);
-        completeAdd = view.findViewById(R.id.completeAdd);
-        PhoneNo = view.findViewById(R.id.PhoneNo);
 
         setupRecyclerView();
 
@@ -131,6 +135,26 @@ public class ProfileAddressFragment extends Fragment {
         loadUserAddresses();
     }
 
+
+    private void showLoader() {
+        loaderLayout.setVisibility(View.VISIBLE);
+        savedAddressLayout.setVisibility(View.GONE);
+        emptyAddressLayout.setVisibility(View.GONE);
+    }
+
+    private void showSavedAddresses() {
+        loaderLayout.setVisibility(View.GONE);
+        savedAddressLayout.setVisibility(View.VISIBLE);
+        emptyAddressLayout.setVisibility(View.GONE);
+    }
+
+    private void showEmptyState() {
+        loaderLayout.setVisibility(View.GONE);
+        savedAddressLayout.setVisibility(View.GONE);
+        emptyAddressLayout.setVisibility(View.VISIBLE);
+    }
+
+
     private void setupRecyclerView() {
         addressList = new ArrayList<>();
         addressAdapter = new AddressAdapter(addressList, new AddressAdapter.OnAddressClick() {
@@ -142,59 +166,116 @@ public class ProfileAddressFragment extends Fragment {
 
             @Override
             public void onDeleteClick(AddressModel item, int position) {
-                performDelete(item);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Delete Address")
+                        .setMessage("Are you sure you want to delete address?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            performDelete(item,position);
+                        })
+                        .setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+
+                builder.create().show();
             }
         });
         addressesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         addressesRecyclerView.setAdapter(addressAdapter);
 
-        // Add item decoration for spacing
-        //addressesRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
-    private void loadUserAddresses() {
-        // Get current user ID
-        String currentUserId = getcurrentuser().getUid();
-        if (currentUserId == null) return;
+//    private void loadUserAddresses() {
+//        // Get current user ID
+//        String currentUserId = getcurrentuser().getUid();
+//        if (currentUserId == null) return;
+//
+//        DatabaseReference userRef = FirebaseDatabase.getInstance()
+//                .getReference("Users")
+//                .child(currentUserId)
+//                .child("addresses");
+//
+//        userRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                addressList.clear();
+//
+//                if (dataSnapshot.exists()) {
+//                    for (DataSnapshot addressSnapshot : dataSnapshot.getChildren()) {
+//                        AddressModel address = addressSnapshot.getValue(AddressModel.class);
+//                        if (address != null) {
+//                            addressList.add(address);
+//                        }
+//                    }
+//                }
+//
+//                // Update UI based on whether we have addresses
+//                addressAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(getContext(), "Failed to load addresses: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+//                //showEmptyState();
+//            }
+//        });
+//    }
+private void loadUserAddresses() {
 
-        DatabaseReference userRef = FirebaseDatabase.getInstance()
-                .getReference("Users")
-                .child(currentUserId)
-                .child("addresses");
+    showLoader(); // show loader immediately
 
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+    String currentUserId = getcurrentuser().getUid();
+    if (currentUserId == null) return;
+
+    DatabaseReference userRef = FirebaseDatabase.getInstance()
+            .getReference("Users")
+            .child(currentUserId)
+            .child("addresses");
+
+    userRef.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            // Delay to show loader smoothly
+            new android.os.Handler().postDelayed(() -> {
+
                 addressList.clear();
 
                 if (dataSnapshot.exists()) {
+
                     for (DataSnapshot addressSnapshot : dataSnapshot.getChildren()) {
                         AddressModel address = addressSnapshot.getValue(AddressModel.class);
                         if (address != null) {
                             addressList.add(address);
                         }
                     }
+
+                    addressAdapter.notifyDataSetChanged();
+                    showSavedAddresses();   // show address layout
+
+                } else {
+                    showEmptyState();       // show empty layout
                 }
 
-                // Update UI based on whether we have addresses
-                addressAdapter.notifyDataSetChanged();
-            }
+            }, 800); // 800ms = smooth loader visible, like Swiggy
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Failed to load addresses: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                //showEmptyState();
-            }
-        });
-    }
+        }
 
-    private void openEditAddressBottomSheet(AddressModel address) {
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            Toast.makeText(getContext(), "Failed: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            showEmptyState();
+        }
+    });
+}
+
+
+
+    public void openEditAddressBottomSheet(AddressModel address) {
         // Create bottom sheet with address data
         AddAddressBottomSheet bottomSheet = AddAddressBottomSheet.newInstance(address);
         bottomSheet.show(getParentFragmentManager(), "edit_address_sheet");
+        addressAdapter.notifyDataSetChanged();
     }
 
-    private void performDelete(AddressModel model) {
+    private void performDelete(AddressModel model,int position) {
         String currentUserId = getcurrentuser().getUid();
         String editAddressId = model.getAddressId();
         if (currentUserId == null) return;
@@ -211,6 +292,8 @@ public class ProfileAddressFragment extends Fragment {
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Failed to delete address", Toast.LENGTH_SHORT).show();
                 });
+        showLoader();
+        addressAdapter.notifyItemChanged(position);
     }
 
 }

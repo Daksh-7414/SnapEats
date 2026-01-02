@@ -28,11 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WishlistScreenFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class WishlistScreenFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -100,7 +95,7 @@ public class WishlistScreenFragment extends Fragment {
         wishlist_food_adapter = new WishlistFoodAdapter(getContext(), new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(FoodItemModel model) {
-                if (!model.isInCart()){
+                if (!CartManager.getInstance().isInCart(model.getId())) {
                     CartManager.getInstance().addToCart(model);
                     Toast.makeText(view.getContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
                 }else {
@@ -110,10 +105,10 @@ public class WishlistScreenFragment extends Fragment {
 
             @Override
             public void onToggleWishlist(FoodItemModel model, int position) {
-                if (model.isInWishlist()) {
-                    wishlistManager.removeWishlist(model);
+                if (WishlistManager.getInstance().isInWishlist(model.getId())) {
+                    WishlistManager.getInstance().removeWishlist(model);
                 } else {
-                    wishlistManager.addWishlist(model);
+                    WishlistManager.getInstance().addWishlist(model);
                 }
             }
 
@@ -157,6 +152,7 @@ public class WishlistScreenFragment extends Fragment {
 
                 loader.setVisibility(View.VISIBLE);
                 wishlistlayout.setVisibility(View.GONE);
+
 
                 new Handler().postDelayed(()->{
                     loader.setVisibility(View.GONE);

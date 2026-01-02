@@ -50,8 +50,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
             @Override
             public void onClick(View v) {
                 listener.onDeleteClick(address,position);
-                addressList.remove(position);
-                notifyItemRemoved(position);
+//                addressList.remove(position);
+//                notifyItemRemoved(position);
 
             }
         });
@@ -63,13 +63,14 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
     }
 
     public class AddressViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvLocationType, tvCompleteAddress, tvPhoneNumber, tvDefaultBadge;
+        private TextView tvLocationType, tvCompleteAddress, tvPhoneNumber, name;
         private ImageButton deleteBtn,eiditaddressbtn;
 
         public AddressViewHolder(@NonNull View itemView) {
             super(itemView);
             tvLocationType = itemView.findViewById(R.id.locationType);
             tvCompleteAddress = itemView.findViewById(R.id.completeAdd);
+            name = itemView.findViewById(R.id.name);
             tvPhoneNumber = itemView.findViewById(R.id.PhoneNo);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
             eiditaddressbtn = itemView.findViewById(R.id.eiditaddressbtn);
@@ -86,6 +87,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
 
             // Set phone number
             tvPhoneNumber.setText(address.getPhoneNumber());
+            name.setText(address.getFullName());
 
 
             // Show default badge if this is the default address

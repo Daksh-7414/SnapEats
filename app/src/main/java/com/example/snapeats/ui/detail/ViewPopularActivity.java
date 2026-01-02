@@ -1,6 +1,9 @@
 package com.example.snapeats.ui.detail;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +30,23 @@ public class ViewPopularActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_popular_food);
 
+        ImageButton backArrow = findViewById(R.id.back_arrow);
+        if (backArrow != null) {
+            backArrow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    });
+                }
+            });
+        } else {
+            Log.e("Error when click on back button", "Back button (imageButton) not found in layout!");
+        }
+
         popularFoodRecycle = findViewById(R.id.popular_food_list);
 
         // ✅ CHANGE TO VERTICAL LAYOUT
@@ -52,7 +72,7 @@ public class ViewPopularActivity extends AppCompatActivity {
         popularFoodAdapter = new RecommendedFoodAdapter(this, new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(FoodItemModel model) {
-                if (!model.isInCart()){
+                if (!CartManager.getInstance().isInCart(model.getId())) {
                     CartManager.getInstance().addToCart(model);
                     Toast.makeText(ViewPopularActivity.this, "Item Add to Cart", Toast.LENGTH_SHORT).show();
                 }else {
@@ -62,18 +82,22 @@ public class ViewPopularActivity extends AppCompatActivity {
 
             @Override
             public void onToggleWishlist(FoodItemModel model, int position) {
-                if (model.isInWishlist()) {
+                if (WishlistManager.getInstance().isInWishlist(model.getId())) {
                     WishlistManager.getInstance().removeWishlist(model);
                 } else {
                     WishlistManager.getInstance().addWishlist(model);
                 }
-                popularFoodAdapter.notifyItemChanged(position, "wishlist");
+                popularFoodAdapter.notifyItemChanged(position);
             }
 
             @Override
             public void onFoodItemClick(FoodItemModel model) {
                 FoodDetailBottomSheet bottomSheet = FoodDetailBottomSheet.newInstance(model);
-                bottomSheet.show(ViewPopularActivity.this.getSupportFragmentManager(), "FoodDetailBottomSheet");
+                bottomSheet.setOnFoodUpdatedListener(() -> {
+                    popularFoodAdapter.notifyDataSetChanged();
+                });
+
+                bottomSheet.show(getSupportFragmentManager(), "FoodDetailBottomSheet");
             }
         });
 

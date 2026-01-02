@@ -315,6 +315,7 @@
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
     <ProgressBar
         android:id="@+id/loader"

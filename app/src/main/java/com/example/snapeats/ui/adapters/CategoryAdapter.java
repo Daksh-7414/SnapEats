@@ -45,6 +45,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         Glide.with(context)
                 .load(categories_model.getCategoryImage())
+                .placeholder(R.drawable.no_image) // loading ke time
+                .error(R.drawable.no_image)
                 .into(holder.category_image);
 
         holder.category_name.setText(categories_model.getCategoryName());

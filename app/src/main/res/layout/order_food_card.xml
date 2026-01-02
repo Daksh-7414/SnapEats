@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="157dp"
+    android:layout_margin="8dp"
+    android:layout_marginTop="3dp">
+
+    <RelativeLayout
+        android:id="@+id/recommended_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/card_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/recommended_food_image"
+            android:layout_width="130dp"
+            android:layout_height="133dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="11dp"
+            android:background="@drawable/card_background"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/pizzaaa"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/order_food_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/recommended_food_image"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="7dp"
+            android:layout_toEndOf="@+id/recommended_food_image"
+            android:text="Tandoori Paneer Burger"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/food_restaurant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/order_food_name"
+            android:layout_alignStart="@id/order_food_name"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="110dp"
+            android:text="Cookie Heaven"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/food_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView15"
+            android:layout_alignEnd="@+id/textView15"
+            android:layout_alignParentStart="false"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/recommended_food_image"
+            android:text="⭐ 4.9 (1.3k)"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/food_restaurant_name"
+            android:layout_alignStart="@+id/food_restaurant_name"
+            android:layout_marginTop="2dp"
+            android:text="• Delivered on 29 Dec"
+            android:textColor="#2266DF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/order_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/food_rating"
+            android:layout_alignTop="@id/food_rating"
+            android:layout_marginTop="25dp"
+            android:layout_toStartOf="@+id/addtocart"
+            android:text="₹180 : Qty: 15"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/order_qty"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignTop="@+id/order_price"-->
+<!--            android:layout_alignBottom="@+id/order_price"-->
+
+<!--            android:layout_toStartOf="@+id/addtocart"-->
+<!--            android:layout_toEndOf="@+id/order_price"-->
+<!--            android:text=" : Qty: 15"-->
+<!--            android:textColor="@color/colorTextPrimary"-->
+<!--            android:textSize="17sp"-->
+<!--            android:textStyle="bold" />-->
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/addtocart"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="108dp"
+            android:layout_marginEnd="13dp"
+            android:background="@drawable/card_background"
+            android:backgroundTint="@color/colorPrimary"
+            android:drawableEnd="@drawable/next_icon"
+            android:drawableTint="@color/white"
+            android:paddingStart="11dp"
+            android:paddingEnd="3dp"
+            android:text="Track Order"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

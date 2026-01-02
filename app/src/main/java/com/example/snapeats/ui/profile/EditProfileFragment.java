@@ -131,7 +131,7 @@ public class EditProfileFragment extends Fragment {
      */
     private void uploadImage() {
         if (imageUri == null) {
-            Toast.makeText(getContext(), "Please select an image first", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Profile Updated!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -173,7 +173,7 @@ public class EditProfileFragment extends Fragment {
                         // Save image URL in Firebase
                         saveImageUrlToFirebase(secureUrl);
 
-                        Toast.makeText(getContext(), "Profile Image Updated!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Profile Updated!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -256,6 +256,8 @@ public class EditProfileFragment extends Fragment {
         if (photoUri != null) {
             Glide.with(this)
                     .load(photoUri)
+                    .placeholder(R.drawable.no_image) // loading ke time
+                    .error(R.drawable.no_image)
                     .circleCrop()
                     .into(profile_image);
         }

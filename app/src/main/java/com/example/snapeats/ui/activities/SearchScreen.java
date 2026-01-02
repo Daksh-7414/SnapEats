@@ -102,7 +102,7 @@ public class SearchScreen extends AppCompatActivity {
         searchAdapter = new RecommendedFoodAdapter(this, new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(FoodItemModel model) {
-                if (!model.isInCart()){
+                if (!CartManager.getInstance().isInCart(model.getId())) {
                     CartManager.getInstance().addToCart(model);
                     Toast.makeText(SearchScreen.this, "Item Add to Cart", Toast.LENGTH_SHORT).show();
                 }else {
@@ -112,7 +112,7 @@ public class SearchScreen extends AppCompatActivity {
 
             @Override
             public void onToggleWishlist(FoodItemModel model, int position) {
-                if (model.isInWishlist()) {
+                if (WishlistManager.getInstance().isInWishlist(model.getId())) {
                     WishlistManager.getInstance().removeWishlist(model);
                 } else {
                     WishlistManager.getInstance().addWishlist(model);
@@ -146,22 +146,6 @@ public class SearchScreen extends AppCompatActivity {
                 allFoodList = new ArrayList<>();
             }
 
-            Log.d(TAG, "Parsed " + allFoodList.size() + " food items");
-
-            // Initially do NOT show items - keep both hidden
-            filteredFoodList.clear();
-
-            // Don't add items to filtered list initially
-            // filteredFoodList.addAll(allFoodList); // COMMENT THIS LINE
-
-            // Don't update adapter with data initially
-            // searchAdapter.updateData(filteredFoodList); // COMMENT THIS LINE
-
-            // Don't update UI state initially - keep both hidden
-            // updateUIState(); // COMMENT THIS LINE
-
-            Log.d(TAG, "Initial state: Both RecyclerView and Not Found layout are hidden");
-
         } catch (Exception e) {
             Log.e(TAG, "Error parsing food list: " + e.getMessage(), e);
             allFoodList = new ArrayList<>();
@@ -171,8 +155,6 @@ public class SearchScreen extends AppCompatActivity {
 
     private void setupSearchView() {
         search_bar.clearFocus();
-
-        // Set focus on search bar
         search_bar.requestFocus();
 
         search_bar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -188,12 +170,12 @@ public class SearchScreen extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 Log.d(TAG, "Search text changed: " + newText);
                 if (newText.isEmpty()) {
-                    // When search is cleared, hide both views
+
                     searchRecyclerView.setVisibility(View.GONE);
                     searchLayout.setVisibility(View.GONE);
                     Log.d(TAG, "Search cleared - hiding both views");
                 } else {
-                    // When user starts typing, filter the list
+
                     filterList(newText);
                 }
                 return true;
@@ -208,13 +190,12 @@ public class SearchScreen extends AppCompatActivity {
         ArrayList<FoodItemModel> newFilteredList = new ArrayList<>();
 
         if (text.isEmpty()) {
-            // When search is empty, hide both views
+
             searchRecyclerView.setVisibility(View.GONE);
             searchLayout.setVisibility(View.GONE);
             Log.d(TAG, "Text empty - hiding both views");
             return;
         } else {
-            // Filter items based on search text
             String searchText = text.toLowerCase().trim();
             Log.d(TAG, "Searching for: " + searchText);
 
@@ -227,15 +208,9 @@ public class SearchScreen extends AppCompatActivity {
                     matches = true;
                     Log.d(TAG, "Found in name: " + food.getFood_name());
                 }
-                // Also check description if you want broader search
-                else if (food.getDescription() != null &&
-                        food.getDescription().toLowerCase().contains(searchText)) {
-                    matches = true;
-                    Log.d(TAG, "Found in description: " + food.getFood_name());
-                }
                 // Also check category if you want even broader search
-                else if (food.getCategory() != null &&
-                        food.getCategory().toLowerCase().contains(searchText)) {
+                else if (food.getFood_restaurant_name() != null &&
+                        food.getFood_restaurant_name().toLowerCase().contains(searchText)) {
                     matches = true;
                     Log.d(TAG, "Found in category: " + food.getFood_name());
                 }

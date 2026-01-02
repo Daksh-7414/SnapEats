@@ -1,6 +1,11 @@
 package com.example.snapeats.ui.detail;
 
+
+
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -41,6 +46,23 @@ public class ViewCategoryActivity extends AppCompatActivity{
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_view_category);
 
+        ImageButton backArrow = findViewById(R.id.back_arrow);
+        if (backArrow != null) {
+            backArrow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    });
+                }
+            });
+        } else {
+            Log.e("Error when click on back button", "Back button (imageButton) not found in layout!");
+        }
+
         foodRepository = new FoodRepository();
 
         // Fetch Data from Firebase
@@ -50,17 +72,17 @@ public class ViewCategoryActivity extends AppCompatActivity{
         bottomAdapter = new BottomAdapter(getApplicationContext(), new OnFoodItemActionListener() {
             @Override
             public void onAddToCart(FoodItemModel model) {
-                if (!model.isInCart()) {
+                if (!CartManager.getInstance().isInCart(model.getId())) {
                     CartManager.getInstance().addToCart(model);
                     Toast.makeText(getApplicationContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
-                } else {
+                }else {
                     Toast.makeText(getApplicationContext(), "Item Already in Cart", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onToggleWishlist(FoodItemModel model, int position) {
-                if (model.isInWishlist()) {
+                if (WishlistManager.getInstance().isInWishlist(model.getId())) {
                     WishlistManager.getInstance().removeWishlist(model);
                 } else {
                     WishlistManager.getInstance().addWishlist(model);
@@ -139,6 +161,7 @@ public class ViewCategoryActivity extends AppCompatActivity{
                     if (food != null) popularFoods.add(food);
                 }
                 bottomAdapter.updateData(popularFoods);
+                //syncWishlistWithFoods(popularFoods);
                 String json = getIntent().getStringExtra("CategoryModel");
                 if (json != null) {
                     Gson gson = new Gson();

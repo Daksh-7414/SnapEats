@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
 import com.example.snapeats.data.interfaces.OnFoodItemActionListener;
+import com.example.snapeats.data.managers.CartManager;
+import com.example.snapeats.data.managers.WishlistManager;
 import com.example.snapeats.data.models.FoodItemModel;
 
 import java.util.ArrayList;
@@ -47,18 +50,29 @@ public class RecommendedFoodAdapter extends RecyclerView.Adapter<RecommendedFood
         FoodItemModel model = recommended_food_list.get(position);
         Glide.with(context)
                 .load(model.getFood_image())
+                .placeholder(R.drawable.no_image) // loading ke time
+                .error(R.drawable.no_image)
                 .into(holder.food_image);
         holder.food_name.setText(model.food_name);
         holder.food_restaurant.setText(model.food_restaurant_name);
+        String ratingText = "⭐ " + String.valueOf(model.rating) + " (1.3k)";
+        holder.rating.setText(ratingText);
         holder.price.setText("₹"+model.price);
 
-        if (model.isInWishlist()) {
+        if (WishlistManager.getInstance().isInWishlist(model.getId())) {
             holder.like_btn.setImageResource(R.drawable.favorite);
-            model.setInWishlist(true);
         } else {
             holder.like_btn.setImageResource(R.drawable.favorite_border);
-            model.setInWishlist(false);
         }
+
+        if (CartManager.getInstance().isInCart(model.getId())){
+            holder.addtocart.setImageResource(R.drawable.already_cart);
+        }else{
+            holder.addtocart.setImageResource(R.drawable.add_circle);
+            holder.addtocart.setClickable(true);
+            holder.addtocart.setEnabled(true);
+        }
+
 
         holder.like_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +85,9 @@ public class RecommendedFoodAdapter extends RecyclerView.Adapter<RecommendedFood
             @Override
             public void onClick(View v) {
                 listener.onAddToCart(model);
+                holder.addtocart.setImageResource(R.drawable.already_cart);
+                holder.addtocart.setClickable(false);
+                holder.addtocart.setEnabled(false);
             }
         });
         holder.recommended_layout.setOnClickListener(new View.OnClickListener() {
@@ -95,9 +112,10 @@ public class RecommendedFoodAdapter extends RecyclerView.Adapter<RecommendedFood
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView food_image,like_btn;
-        TextView food_name,food_restaurant,price;
+        TextView food_name,food_restaurant,price,rating;
         ImageButton addtocart;
         RelativeLayout recommended_layout;
+        LinearLayout qtyLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -105,9 +123,12 @@ public class RecommendedFoodAdapter extends RecyclerView.Adapter<RecommendedFood
             food_name = itemView.findViewById(R.id.recommended_food_name);
             food_restaurant = itemView.findViewById(R.id.food_restaurant_name);
             price = itemView.findViewById(R.id.recommended_food_price);
+            rating = itemView.findViewById(R.id.textView3);
             like_btn = itemView.findViewById(R.id.like_btn);
             addtocart = itemView.findViewById(R.id.addtocart);
             recommended_layout = itemView.findViewById(R.id.recommended_layout);
+            qtyLayout = itemView.findViewById(R.id.qtyLayout);
+
         }
     }
 }

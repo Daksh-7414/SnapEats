@@ -9,7 +9,7 @@
 
         <RelativeLayout
             android:id="@+id/recommended_layout"
-           android:background="@drawable/card_background"
+            android:background="@drawable/card_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
@@ -75,11 +75,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/food_restaurant_name"
-
                 android:layout_alignEnd="@+id/food_restaurant_name"
                 android:layout_alignParentStart="false"
                 android:layout_marginStart="12dp"
-
                 android:layout_marginTop="24dp"
                 android:layout_toEndOf="@+id/recommended_food_image"
                 android:text="⭐ 4.9 (1.3k)"
@@ -112,6 +110,42 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/add_circle" />
 
+            <LinearLayout
+                android:id="@+id/qtyLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_below="@+id/like_btn"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="59dp"
+                android:layout_marginEnd="9dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/btnMinus"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/minus_icon" />
+
+                <TextView
+                    android:id="@+id/txtQty"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/btnPlus"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/add_circle" />
+            </LinearLayout>
 
         </RelativeLayout>
 

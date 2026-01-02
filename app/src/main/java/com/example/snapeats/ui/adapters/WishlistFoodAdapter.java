@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.snapeats.R;
 import com.example.snapeats.data.interfaces.OnFoodItemActionListener;
+import com.example.snapeats.data.managers.CartManager;
 import com.example.snapeats.data.models.FoodItemModel;
 
 import java.util.ArrayList;
@@ -46,15 +47,35 @@ public class WishlistFoodAdapter extends RecyclerView.Adapter<WishlistFoodAdapte
         FoodItemModel model = wishlist_food_item.get(position);
         Glide.with(context)
                 .load(model.getFood_image())
+                .placeholder(R.drawable.no_image) // loading ke time
+                .error(R.drawable.no_image)
                 .into(holder.food_image);
         holder.food_name.setText(model.food_name);
         holder.food_restaurant.setText(model.food_restaurant_name);
+        String ratingText = "⭐ " + String.valueOf(model.rating) + " (1.3k)";
+        holder.rating.setText(ratingText);
         holder.price.setText("₹"+model.price);
         holder.like_btn.setImageResource(R.drawable.favorite);
 
         holder.like_btn.setOnClickListener(v -> listener.onToggleWishlist(model,position));
 
-        holder.addtocart.setOnClickListener(v -> listener.onAddToCart(model));
+        if (CartManager.getInstance().isInCart(model.getId())){
+            holder.addtocart.setImageResource(R.drawable.already_cart);
+        }else{
+            holder.addtocart.setImageResource(R.drawable.add_circle);
+            holder.addtocart.setClickable(true);
+            holder.addtocart.setEnabled(true);
+        }
+
+        holder.addtocart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onAddToCart(model);
+                holder.addtocart.setImageResource(R.drawable.already_cart);
+                holder.addtocart.setClickable(false);
+                holder.addtocart.setEnabled(false);
+            }
+        });
 
         holder.wishlist_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +100,7 @@ public class WishlistFoodAdapter extends RecyclerView.Adapter<WishlistFoodAdapte
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView food_image,like_btn;
-        TextView food_name,food_restaurant,price;
+        TextView food_name,food_restaurant,price,rating;
         ImageButton addtocart;
         RelativeLayout wishlist_layout;
 
@@ -89,6 +110,7 @@ public class WishlistFoodAdapter extends RecyclerView.Adapter<WishlistFoodAdapte
             food_name = itemView.findViewById(R.id.recommended_food_name);
             food_restaurant = itemView.findViewById(R.id.food_restaurant_name);
             price = itemView.findViewById(R.id.recommended_food_price);
+            rating = itemView.findViewById(R.id.textView3);
             like_btn = itemView.findViewById(R.id.like_btn);
             addtocart = itemView.findViewById(R.id.addtocart);
             wishlist_layout = itemView.findViewById(R.id.recommended_layout);

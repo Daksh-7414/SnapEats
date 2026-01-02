@@ -123,6 +123,8 @@ public class ProfileScreenFragment extends Fragment {
             if(photoUri != null){
                 Glide.with(this)
                         .load(photoUri)
+                        .placeholder(R.drawable.no_image) // loading ke time
+                        .error(R.drawable.no_image)
                         .circleCrop()
                         .into(profileImage);
             }

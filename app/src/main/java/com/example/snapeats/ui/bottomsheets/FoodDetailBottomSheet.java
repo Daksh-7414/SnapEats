@@ -63,6 +63,7 @@ public class FoodDetailBottomSheet extends BottomSheetDialogFragment {
         TextView restaurantName = view.findViewById(R.id.food_restaurant_name);
         TextView foodDescription = view.findViewById(R.id.food_description);
         TextView foodPriceDown = view.findViewById(R.id.food_price);
+        TextView rating = view.findViewById(R.id.food_rating);
         AppCompatButton addToCart = view.findViewById(R.id.order_btn);
         ImageView wishlistButton = view.findViewById(R.id.wishlist_btn);
 
@@ -71,26 +72,24 @@ public class FoodDetailBottomSheet extends BottomSheetDialogFragment {
         restaurantName.setText(model.getFood_restaurant_name());
         foodDescription.setText(model.getDescription());
         foodPriceDown.setText("₹" + model.getPrice());
+        String ratingText = "⭐ " + String.valueOf(model.rating) + " (1.3k)";
+        rating.setText(ratingText);
 
-        if (model.isInWishlist()) {
+        if (WishlistManager.getInstance().isInWishlist(model.getId())) {
             wishlistButton.setImageResource(R.drawable.favorite);
-            model.setInWishlist(true);
         } else {
             wishlistButton.setImageResource(R.drawable.favorite_border);
-            model.setInWishlist(false);
         }
 
-        if (model.isInCart()) {
+        if (CartManager.getInstance().isInCart(model.getId())) {
             addToCart.setText("Added");
-            model.setInCart(true);
         } else {
             addToCart.setText("Add");
-            model.setInCart(false);
         }
 
         //Add to Cart Functionality
         addToCart.setOnClickListener(v -> {
-            if (!model.isInCart()){
+            if (!CartManager.getInstance().isInCart(model.getId())) {
                 CartManager.getInstance().addToCart(model);
                 addToCart.setText("Added");
                 Toast.makeText(view.getContext(), "Item Add to Cart", Toast.LENGTH_SHORT).show();
@@ -103,7 +102,7 @@ public class FoodDetailBottomSheet extends BottomSheetDialogFragment {
 
         //Add to Wishlist Functionality
         wishlistButton.setOnClickListener(v -> {
-            if (model.isInWishlist()) {
+            if (WishlistManager.getInstance().isInWishlist(model.getId())) {
                 WishlistManager.getInstance().removeWishlist(model);
                 wishlistButton.setImageResource(R.drawable.favorite_border);
             } else {
