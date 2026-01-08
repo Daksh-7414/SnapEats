@@ -236,23 +236,7 @@ public class LoginFragment extends Fragment {
         Log.w(TAG, "signInWithEmail:failure", task.getException());
         String errorMessage = "Login failed. Please try again.";
 
-        // Provide specific error messages for common cases
-//        if (task.getException() != null) {
-//            String exceptionMessage = task.getException().getMessage();
-//            if (exceptionMessage.contains("invalid login credentials") ||
-//                    exceptionMessage.contains("no user record") ||
-//                    exceptionMessage.contains("password is invalid")) {
-//                errorMessage = "Invalid email or password. Please check your credentials.";
-//            } else if (exceptionMessage.contains("network error")) {
-//                errorMessage = "Network error. Please check your internet connection.";
-//            } else if (exceptionMessage.contains("too many requests")) {
-//                errorMessage = "Too many login attempts. Please try again later.";
-//            } else if (exceptionMessage.contains("user not found")) {
-//                errorMessage = "No account found with this email. Please sign up first.";
-//            } else {
-//                errorMessage = exceptionMessage;
-//            }
-//        }
+
 
         Toast.makeText(getContext(), errorMessage, Toast.LENGTH_LONG).show();
         updateUI(null);

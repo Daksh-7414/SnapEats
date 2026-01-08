@@ -311,7 +311,7 @@ public class SignupFragment extends Fragment {
 
     /**
      * Handles registration failure
-     * Displays appropriate error message to user
+     * Displays error message to user
      */
     private void handleSignUpFailure(@NonNull Task<AuthResult> task) {
         Log.w(TAG, "createUserWithEmail:failure", task.getException());
