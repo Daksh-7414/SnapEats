@@ -95,6 +95,28 @@ SnapEats is a feature-rich food delivery application designed with **modern UI/U
   * Redirects to Login screen
 
 ---
+---
+
+# 📸 App Screenshots
+
+| Login | Home | Categories | Popular Food |
+|-------|------|------------|--------------|
+| <img src="screenshots/LoginScreen.png" width="220"/> | <img src="screenshots/HomeScreen.png" width="220"/> | <img src="screenshots/AllCategoryScreen.png" width="220"/> | <img src="screenshots/PopularFoodScreen.png" width="220"/> |
+
+| Search | Food Details | Wishlist  | Cart |
+|--------|--------------|-----------|------|
+| <img src="screenshots/SearchScreen.png" width="220"/> | <img src="screenshots/DetailFoodScreen.png" width="220"/> | <img src="screenshots/WishlistScreen.png" width="220"/> | <img src="screenshots/CartScreen.png" width="220"/> |
+
+| Address | Checkout | Payment | Orders |
+|----------|----------|---------|--------|
+| <img src="screenshots/AddressScreen.png" width="220"/> | <img src="screenshots/CheckoutScreen.png" width="220"/> | <img src="screenshots/PaymentScreen.png" width="220"/> | <img src="screenshots/OrdersScreen.png" width="220"/> |
+
+| Profile | Edit Profile | Logout |
+|---------|--------------|--------|
+| <img src="screenshots/ProfileScreen.png" width="220"/> | <img src="screenshots/EditProfileScreen.png" width="220"/> | <img src="screenshots/LogoutScreen.png" width="220"/> |
+
+---
+
 
 ## 🛠 Tech Stack
 
@@ -183,6 +205,9 @@ Build and run on emulator or device.
 ## 👨‍💻 Developer
 
 **Daksh Singh**  
-Android Developer | Java | Firebase | UI/UX  
+
+Android Developer | Kotlin | Jetpack Compose | Firebase | Room | Hilt
+
+🔗 LinkedIn: https://www.linkedin.com/in/daksh-singh82/
 
 ---
